@@ -23,7 +23,24 @@
         }
         .song-title { font-size: 1.4rem; font-weight: bold; margin: 0 0 5px 0;}
         .song-author { font-size: 1rem; color: #aaaaaa; margin: 0 0 15px 0;}
-        audio { width: 100%; outline: none; }
+        audio { width: 100%; outline: none; margin-bottom: 12px; }
+        
+        /* Стиль для кнопки скачивания */
+        .download-btn {
+            display: inline-block;
+            background-color: #ffffff;
+            color: #000000;
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+        .download-btn:hover {
+            background-color: #cccccc;
+        }
+        
         .back-btn {
             display: inline-block;
             margin-bottom: 20px;
@@ -46,18 +63,22 @@
             .then(data => {
                 const list = document.getElementById('song-list');
                 data.forEach(song => {
-                    // Преобразуем ссылку дропбокса для прямого прослушивания
-                    const directUrl = song.url.replace('dl=0', 'raw=1');
+                    // Ссылка для воспроизведения в плеере (raw=1)
+                    const playUrl = song.url.replace('dl=0', 'raw=1');
+                    // Ссылка для принудительного скачивания (dl=1)
+                    const downloadUrl = song.url.replace('dl=0', 'dl=1');
                     
                     const card = document.createElement('div');
                     card.className = 'song-card';
                     card.innerHTML = `
                         <p class="song-title">${song.title}</p>
                         <p class="song-author">${song.author}</p>
-                        <audio controls controlsList="nodownload">
-                            <source src="${directUrl}" type="audio/mpeg">
+                        <audio controls>
+                            <source src="${playUrl}" type="audio/mpeg">
                             Ваш браузер не поддерживает аудио элемент.
                         </audio>
+                        <br>
+                        <a href="${downloadUrl}" download class="download-btn">Скачать песню</a>
                     `;
                     list.appendChild(card);
                 });
@@ -66,4 +87,3 @@
     </script>
 </body>
 </html>
-

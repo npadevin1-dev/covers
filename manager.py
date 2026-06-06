@@ -4,6 +4,7 @@ import subprocess
 
 DB_FILE = "/storage/emulated/0/Download/CoverRepo/songs.json"
 REPO_DIR = "/storage/emulated/0/Download/CoverRepo"
+SITE_URL = "https://npadevin1-dev.github.io/covers/"
 
 def load_songs():
     if not os.path.exists(DB_FILE):
@@ -17,6 +18,11 @@ def load_songs():
 def save_songs(songs):
     with open(DB_FILE, 'w', encoding='utf-8') as f:
         json.dump(songs, f, indent=4, ensure_ascii=False)
+
+def open_browser():
+    print(f"Открываю браузер: {SITE_URL}")
+    # Используем системную команду Android для открытия ссылки в браузере
+    subprocess.run(["termux-open", SITE_URL], check=False)
 
 def sync_to_github():
     print("\nСинхронизация с сервером...")
@@ -32,6 +38,7 @@ def main():
         print("1. Посмотреть список песен")
         print("2. Добавить новую песню")
         print("3. Удалить песню")
+        print("4. Перейти на сайт (открыть в браузере)")
         print("0. Выход")
         
         choice = input("Выберите действие: ")
@@ -59,6 +66,11 @@ def main():
             print(f"Песня '{title}' добавлена.")
             sync_to_github()
             
+            # Предлагаем сразу открыть сайт, чтобы проверить
+            check_site = input("Открыть сайт в браузере для проверки? (y/n): ").strip().lower()
+            if check_site == 'y' or check_site == 'н':
+                open_browser()
+                
         elif choice == '3':
             print("\n--- УДАЛЕНИЕ ---")
             if not songs:
@@ -85,6 +97,10 @@ def main():
             except ValueError:
                 print("Ошибка: нужно ввести число.")
                 
+        elif choice == '4':
+            print("\nПереходим на сайт...")
+            open_browser()
+            
         elif choice == '0':
             break
         else:
