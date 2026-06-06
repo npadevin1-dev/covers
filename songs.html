@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Список песен</title>
     <style>
-        /* Определение анимации перелива цветов */
         @keyframes rgb-shadow {
             0% { border-color: #ff0000; box-shadow: 0 0 10px #ff0000; }
             15% { border-color: #ff8800; box-shadow: 0 0 10px #ff8800; }
@@ -23,6 +22,13 @@
             100% { color: #ff00ff; text-shadow: 0 0 5px #ff00ff; }
         }
 
+        /* Анимация пульсации для плеера */
+        @keyframes player-glow {
+            0% { box-shadow: 0 0 4px #00ffff; }
+            50% { box-shadow: 0 0 14px #00ffff; }
+            100% { box-shadow: 0 0 4px #00ffff; }
+        }
+
         body {
             background-color: #050505;
             color: #ffffff;
@@ -37,6 +43,7 @@
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 3px;
+            font-size: 1.8rem;
             animation: text-glow 4s infinite linear;
         }
 
@@ -46,15 +53,13 @@
             margin-bottom: 25px;
             border-radius: 12px;
             border: 2px solid #ff0000;
-            /* Плавное бесконечное переливание рамки и неонового свечения */
             animation: rgb-shadow 6s infinite linear;
         }
 
         .song-title { 
-            font-size: 1.5rem; 
+            font-size: 1.4rem; 
             font-weight: bold; 
             margin: 0 0 5px 0;
-            color: #ffffff;
         }
 
         .song-author { 
@@ -64,14 +69,16 @@
             font-style: italic;
         }
 
+        /* Эффект для аудиоплеера */
         audio { 
             width: 100%; 
             outline: none; 
             margin-bottom: 15px; 
             border-radius: 30px;
+            background: #222;
+            animation: player-glow 3s infinite ease-in-out;
         }
         
-        /* Стилизация кнопки скачивания под RGB тему */
         .download-btn {
             display: inline-block;
             background-color: transparent;
@@ -99,12 +106,6 @@
             border: 1px solid #444;
             padding: 6px 18px;
             border-radius: 6px;
-            transition: 0.2s;
-        }
-
-        .back-btn:hover {
-            color: #fff;
-            border-color: #fff;
         }
     </style>
 </head>
@@ -124,8 +125,6 @@
                     
                     const card = document.createElement('div');
                     card.className = 'song-card';
-                    
-                    // Небольшое смещение анимации для каждой карточки, чтобы они переливались несинхронно
                     card.style.animationDelay = `${index * 0.5}s`;
                     
                     card.innerHTML = `

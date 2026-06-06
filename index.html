@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Хранилище каверов</title>
     <style>
-        /* Анимация перелива спектра для кнопки */
         @keyframes rgb-glow {
             0% { border-color: #ff0000; box-shadow: 0 0 15px #ff0000; }
             15% { border-color: #ff8800; box-shadow: 0 0 15px #ff8800; }
@@ -17,7 +16,6 @@
             100% { border-color: #ff0000; box-shadow: 0 0 15px #ff0000; }
         }
 
-        /* Анимация неонового пульсирования для заголовка */
         @keyframes title-neon {
             0% { color: #00ffff; text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff; }
             50% { color: #ff00ff; text-shadow: 0 0 10px #ff00ff, 0 0 30px #ff00ff; }
@@ -34,41 +32,38 @@
             justify-content: center;
             height: 100vh;
             margin: 0;
-            padding: 0 10px;
+            padding: 0 15px;
             box-sizing: border-box;
             overflow: hidden;
         }
 
         h1 {
-            font-size: 2rem;
-            margin-bottom: 50px;
+            font-size: 7.5vw; /* Размер теперь зависит от ширины экрана */
+            max-size: 2.2rem;
+            margin-bottom: 40px;
             text-transform: uppercase;
-            letter-spacing: 3px;
+            letter-spacing: 2px;
             white-space: nowrap;
             text-align: center;
-            /* Включаем неоновую анимацию */
             animation: title-neon 4s infinite ease-in-out;
         }
 
         .btn {
             background-color: transparent;
             color: #ffffff;
-            padding: 18px 36px;
-            font-size: 1.3rem;
+            padding: 16px 32px;
+            font-size: 1.1rem;
             text-decoration: none;
             border-radius: 8px;
             font-weight: bold;
             text-transform: uppercase;
             letter-spacing: 1px;
             border: 3px solid #ff0000;
-            /* Бесконечный RGB перелив */
             animation: rgb-glow 4s infinite linear;
-            transition: transform 0.2s, background-color 0.3s;
+            transition: transform 0.2s;
         }
 
-        /* Эффект при нажатии или наведении пальцем */
         .btn:hover, .btn:active {
-            background-color: rgba(255, 255, 255, 0.05);
             transform: scale(1.05);
         }
     </style>
