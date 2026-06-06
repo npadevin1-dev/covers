@@ -22,11 +22,10 @@
             100% { color: #ff00ff; text-shadow: 0 0 5px #ff00ff; }
         }
 
-        /* Анимация пульсации для плеера */
-        @keyframes player-glow {
-            0% { box-shadow: 0 0 4px #00ffff; }
-            50% { box-shadow: 0 0 14px #00ffff; }
-            100% { box-shadow: 0 0 4px #00ffff; }
+        @keyframes pulse-cyan {
+            0% { box-shadow: 0 0 5px #00ffff; }
+            50% { box-shadow: 0 0 15px #00ffff; }
+            100% { box-shadow: 0 0 5px #00ffff; }
         }
 
         body {
@@ -43,7 +42,7 @@
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 3px;
-            font-size: 1.8rem;
+            font-size: 2rem;
             animation: text-glow 4s infinite linear;
         }
 
@@ -66,17 +65,60 @@
             font-size: 1rem; 
             color: #888888; 
             margin: 0 0 15px 0;
-            font-style: italic;
         }
 
-        /* Эффект для аудиоплеера */
-        audio { 
-            width: 100%; 
-            outline: none; 
-            margin-bottom: 15px; 
-            border-radius: 30px;
-            background: #222;
-            animation: player-glow 3s infinite ease-in-out;
+        /* КАСТОМНЫЙ ПЛЕЕР СТИЛИ */
+        .custom-player {
+            display: flex;
+            align-items: center;
+            background: #1a1a1a;
+            padding: 12px;
+            border-radius: 50px;
+            margin-bottom: 15px;
+            border: 1px solid #00ffff;
+            animation: pulse-cyan 3s infinite ease-in-out;
+        }
+
+        .play-btn {
+            background: #00ffff;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: #000;
+            font-weight: bold;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            outline: none;
+        }
+
+        .progress-bar {
+            flex-grow: 1;
+            height: 6px;
+            background: #333;
+            border-radius: 3px;
+            position: relative;
+            cursor: pointer;
+            margin-right: 15px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: #00ffff;
+            border-radius: 3px;
+            box-shadow: 0 0 8px #00ffff;
+        }
+
+        .time-display {
+            font-size: 0.85rem;
+            color: #00ffff;
+            font-family: monospace;
+            white-space: nowrap;
         }
         
         .download-btn {
@@ -115,6 +157,13 @@
     <div id="song-list"></div>
 
     <script>
+        function formatTime(secs) {
+            if (isNaN(secs)) return "0:00";
+            const m = Math.floor(secs / 60);
+            const s = Math.floor(secs % 60);
+            return `${m}:${s < 10 ? '0' : ''}${s}`;
+        }
+
         fetch('songs.json')
             .then(response => response.json())
             .then(data => {
@@ -130,17 +179,69 @@
                     card.innerHTML = `
                         <p class="song-title">${song.title}</p>
                         <p class="song-author">${song.author}</p>
-                        <audio controls>
-                            <source src="${playUrl}" type="audio/mpeg">
-                            Ваш браузер не поддерживает аудио элемент.
-                        </audio>
-                        <br>
+                        
+                        <div class="custom-player">
+                            <audio id="audio-${index}" src="${playUrl}" preload="metadata"></audio>
+                            <button class="play-btn" id="btn-${index}">▶</button>
+                            <div class="progress-bar" id="bar-${index}">
+                                <div class="progress-fill" id="fill-${index}"></div>
+                            </div>
+                            <span class="time-display" id="time-${index}">0:00 / 0:00</span>
+                        </div>
+                        
                         <a href="${downloadUrl}" download class="download-btn">Скачать песню</a>
                     `;
                     list.appendChild(card);
+
+                    // Логика кастомного плеера
+                    const audio = card.querySelector(`#audio-${index}`);
+                    const btn = card.querySelector(`#btn-${index}`);
+                    const bar = card.querySelector(`#bar-${index}`);
+                    const fill = card.querySelector(`#fill-${index}`);
+                    const timeDisp = card.querySelector(`#time-${index}`);
+
+                    btn.addEventListener('click', () => {
+                        // Останавливаем другие плееры, если они играют
+                        document.querySelectorAll('audio').forEach(a => {
+                            if (a !== audio) {
+                                a.pause();
+                                const pBtn = a.nextElementSibling;
+                                if(pBtn && pBtn.classList.contains('play-btn')) pBtn.innerText = '▶';
+                            }
+                        });
+
+                        if (audio.paused) {
+                            audio.play();
+                            btn.innerText = '❚❚';
+                        } else {
+                            audio.pause();
+                            btn.innerText = '▶';
+                        }
+                    });
+
+                    audio.addEventListener('loadedmetadata', () => {
+                        timeDisp.innerText = `0:00 / ${formatTime(audio.duration)}`;
+                    });
+
+                    audio.addEventListener('timeupdate', () => {
+                        const pct = (audio.currentTime / audio.duration) * 100;
+                        fill.style.width = `${pct}%`;
+                        timeDisp.innerText = `${formatTime(audio.currentTime)} / ${formatTime(audio.duration)}`;
+                    });
+
+                    bar.addEventListener('click', (e) => {
+                        const rect = bar.getBoundingClientRect();
+                        const pct = (e.clientX - rect.left) / rect.width;
+                        audio.currentTime = pct * audio.duration;
+                    });
+                    
+                    audio.addEventListener('ended', () => {
+                        btn.innerText = '▶';
+                        fill.style.width = '0%';
+                    });
                 });
             })
-            .catch(err => console.error('Ошибка загрузки песен:', err));
+            .catch(err => console.error('Ошибка загрузки:', err));
     </script>
 </body>
 </html>
