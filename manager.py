@@ -1,6 +1,7 @@
 import json
 import os
 import subprocess
+import time # Добавили модуль для работы со временем
 
 DB_FILE = "/storage/emulated/0/Download/CoverRepo/songs.json"
 REPO_DIR = "/storage/emulated/0/Download/CoverRepo"
@@ -20,9 +21,10 @@ def save_songs(songs):
         json.dump(songs, f, indent=4, ensure_ascii=False)
 
 def open_browser():
-    print(f"Открываю браузер: {SITE_URL}")
-    # Используем системную команду Android для открытия ссылки в браузере
-    subprocess.run(["termux-open", SITE_URL], check=False)
+    # Генерируем уникальный хвост на основе текущего времени (оптимизация против кэша)
+    nocache_url = f"{SITE_URL}?t={int(time.time())}"
+    print(f"Открываю браузер (кэш сброшен): {nocache_url}")
+    subprocess.run(["termux-open", nocache_url], check=False)
 
 def sync_to_github():
     print("\nСинхронизация с сервером...")
@@ -66,9 +68,10 @@ def main():
             print(f"Песня '{title}' добавлена.")
             sync_to_github()
             
-            # Предлагаем сразу открыть сайт, чтобы проверить
             check_site = input("Открыть сайт в браузере для проверки? (y/n): ").strip().lower()
             if check_site == 'y' or check_site == 'н':
+                print("Подожди 10 секунд, чтобы сервер GitHub успел принять файлы...")
+                time.sleep(10) # Небольшая пауза, чтобы изменения успели примениться на GitHub
                 open_browser()
                 
         elif choice == '3':
@@ -98,7 +101,6 @@ def main():
                 print("Ошибка: нужно ввести число.")
                 
         elif choice == '4':
-            print("\nПереходим на сайт...")
             open_browser()
             
         elif choice == '0':
