@@ -5,50 +5,106 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Список песен</title>
     <style>
+        /* Определение анимации перелива цветов */
+        @keyframes rgb-shadow {
+            0% { border-color: #ff0000; box-shadow: 0 0 10px #ff0000; }
+            15% { border-color: #ff8800; box-shadow: 0 0 10px #ff8800; }
+            30% { border-color: #ffff00; box-shadow: 0 0 10px #ffff00; }
+            45% { border-color: #00ff00; box-shadow: 0 0 10px #00ff00; }
+            60% { border-color: #00ffff; box-shadow: 0 0 10px #00ffff; }
+            75% { border-color: #0000ff; box-shadow: 0 0 10px #0000ff; }
+            90% { border-color: #ff00ff; box-shadow: 0 0 10px #ff00ff; }
+            100% { border-color: #ff0000; box-shadow: 0 0 10px #ff0000; }
+        }
+
+        @keyframes text-glow {
+            0% { color: #ff00ff; text-shadow: 0 0 5px #ff00ff; }
+            50% { color: #00ffff; text-shadow: 0 0 5px #00ffff; }
+            100% { color: #ff00ff; text-shadow: 0 0 5px #ff00ff; }
+        }
+
         body {
-            background-color: #0f0f0f;
+            background-color: #050505;
             color: #ffffff;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             padding: 20px;
             max-width: 800px;
             margin: auto;
         }
-        h1 { text-align: center; }
-        .song-card {
-            background-color: #1a1a1a;
-            padding: 15px;
-            margin-bottom: 15px;
-            border-radius: 8px;
-            border-left: 4px solid #ffffff;
-        }
-        .song-title { font-size: 1.4rem; font-weight: bold; margin: 0 0 5px 0;}
-        .song-author { font-size: 1rem; color: #aaaaaa; margin: 0 0 15px 0;}
-        audio { width: 100%; outline: none; margin-bottom: 12px; }
         
-        /* Стиль для кнопки скачивания */
+        h1 { 
+            text-align: center; 
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            animation: text-glow 4s infinite linear;
+        }
+
+        .song-card {
+            background-color: #121212;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-radius: 12px;
+            border: 2px solid #ff0000;
+            /* Плавное бесконечное переливание рамки и неонового свечения */
+            animation: rgb-shadow 6s infinite linear;
+        }
+
+        .song-title { 
+            font-size: 1.5rem; 
+            font-weight: bold; 
+            margin: 0 0 5px 0;
+            color: #ffffff;
+        }
+
+        .song-author { 
+            font-size: 1rem; 
+            color: #888888; 
+            margin: 0 0 15px 0;
+            font-style: italic;
+        }
+
+        audio { 
+            width: 100%; 
+            outline: none; 
+            margin-bottom: 15px; 
+            border-radius: 30px;
+        }
+        
+        /* Стилизация кнопки скачивания под RGB тему */
         .download-btn {
             display: inline-block;
-            background-color: #ffffff;
-            color: #000000;
-            padding: 8px 16px;
+            background-color: transparent;
+            color: #ffffff;
+            padding: 10px 20px;
             font-size: 0.9rem;
             text-decoration: none;
-            border-radius: 4px;
+            border-radius: 6px;
             font-weight: bold;
-            transition: 0.2s;
+            border: 1px solid #ffffff;
+            transition: all 0.3s ease;
         }
+
         .download-btn:hover {
-            background-color: #cccccc;
+            background-color: #ffffff;
+            color: #000000;
+            box-shadow: 0 0 15px #ffffff;
         }
         
         .back-btn {
             display: inline-block;
-            margin-bottom: 20px;
-            color: #fff;
+            margin-bottom: 25px;
+            color: #aaa;
             text-decoration: none;
-            border: 1px solid #fff;
-            padding: 5px 15px;
-            border-radius: 5px;
+            border: 1px solid #444;
+            padding: 6px 18px;
+            border-radius: 6px;
+            transition: 0.2s;
+        }
+
+        .back-btn:hover {
+            color: #fff;
+            border-color: #fff;
         }
     </style>
 </head>
@@ -62,14 +118,16 @@
             .then(response => response.json())
             .then(data => {
                 const list = document.getElementById('song-list');
-                data.forEach(song => {
-                    // Ссылка для воспроизведения в плеере (raw=1)
+                data.forEach((song, index) => {
                     const playUrl = song.url.replace('dl=0', 'raw=1');
-                    // Ссылка для принудительного скачивания (dl=1)
                     const downloadUrl = song.url.replace('dl=0', 'dl=1');
                     
                     const card = document.createElement('div');
                     card.className = 'song-card';
+                    
+                    // Небольшое смещение анимации для каждой карточки, чтобы они переливались несинхронно
+                    card.style.animationDelay = `${index * 0.5}s`;
+                    
                     card.innerHTML = `
                         <p class="song-title">${song.title}</p>
                         <p class="song-author">${song.author}</p>
