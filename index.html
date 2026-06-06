@@ -5,8 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Хранилище каверов</title>
     <style>
+        /* Анимация перелива спектра для кнопки */
+        @keyframes rgb-glow {
+            0% { border-color: #ff0000; box-shadow: 0 0 15px #ff0000; }
+            15% { border-color: #ff8800; box-shadow: 0 0 15px #ff8800; }
+            30% { border-color: #ffff00; box-shadow: 0 0 15px #ffff00; }
+            45% { border-color: #00ff00; box-shadow: 0 0 15px #00ff00; }
+            60% { border-color: #00ffff; box-shadow: 0 0 15px #00ffff; }
+            75% { border-color: #0000ff; box-shadow: 0 0 15px #0000ff; }
+            90% { border-color: #ff00ff; box-shadow: 0 0 15px #ff00ff; }
+            100% { border-color: #ff0000; box-shadow: 0 0 15px #ff0000; }
+        }
+
+        /* Анимация неонового пульсирования для заголовка */
+        @keyframes title-neon {
+            0% { color: #00ffff; text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff; }
+            50% { color: #ff00ff; text-shadow: 0 0 10px #ff00ff, 0 0 30px #ff00ff; }
+            100% { color: #00ffff; text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff; }
+        }
+
         body {
-            background-color: #0f0f0f;
+            background-color: #050505;
             color: #ffffff;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
@@ -17,27 +36,40 @@
             margin: 0;
             padding: 0 10px;
             box-sizing: border-box;
+            overflow: hidden;
         }
+
         h1 {
-            font-size: 1.8rem; /* Уменьшили размер с 3rem до 1.8rem */
-            margin-bottom: 40px;
+            font-size: 2rem;
+            margin-bottom: 50px;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            white-space: nowrap; /* Запретили перенос строки */
+            letter-spacing: 3px;
+            white-space: nowrap;
             text-align: center;
+            /* Включаем неоновую анимацию */
+            animation: title-neon 4s infinite ease-in-out;
         }
+
         .btn {
-            background-color: #ffffff;
-            color: #000000;
-            padding: 15px 30px;
-            font-size: 1.2rem;
+            background-color: transparent;
+            color: #ffffff;
+            padding: 18px 36px;
+            font-size: 1.3rem;
             text-decoration: none;
-            border-radius: 5px;
+            border-radius: 8px;
             font-weight: bold;
-            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 3px solid #ff0000;
+            /* Бесконечный RGB перелив */
+            animation: rgb-glow 4s infinite linear;
+            transition: transform 0.2s, background-color 0.3s;
         }
-        .btn:hover {
-            background-color: #cccccc;
+
+        /* Эффект при нажатии или наведении пальцем */
+        .btn:hover, .btn:active {
+            background-color: rgba(255, 255, 255, 0.05);
+            transform: scale(1.05);
         }
     </style>
 </head>
