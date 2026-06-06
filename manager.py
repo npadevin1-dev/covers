@@ -42,13 +42,13 @@ def main():
             if not songs:
                 print("Список пуст.")
             for i, s in enumerate(songs, 1):
-                print(f"{i}. '{s['title']}' - {s['author']}")
+                print(f"{i}. '{s['title']}' — {s['author']}")
                 
         elif choice == '2':
             print("\n--- ДОБАВЛЕНИЕ ---")
-            title = input("Название песни: ").strip() # Отрезаем пробелы
-            author = input("Автор: ").strip() # Отрезаем пробелы
-            url = input("Ссылка на Dropbox: ").strip() # Отрезаем пробелы
+            title = input("Название песни: ").strip()
+            author = input("Автор: ").strip()
+            url = input("Ссылка на Dropbox: ").strip()
             
             if not title:
                 print("Название не может быть пустым.")
@@ -61,18 +61,29 @@ def main():
             
         elif choice == '3':
             print("\n--- УДАЛЕНИЕ ---")
-            title_to_delete = input("Введите точное название песни для удаления: ").strip() # Отрезаем пробелы
+            if not songs:
+                print("На сайте пока нет песен для удаления.")
+                continue
+                
+            print("Выберите номер песни, которую нужно удалить:")
+            for i, s in enumerate(songs, 1):
+                print(f"{i}. '{s['title']}' — {s['author']}")
+            print("0. Отмена")
             
-            initial_count = len(songs)
-            # Фильтруем список, убирая пробелы при сравнении
-            songs = [s for s in songs if s['title'].strip().lower() != title_to_delete.lower()]
-            
-            if len(songs) < initial_count:
-                save_songs(songs)
-                print(f"Песня '{title_to_delete}' удалена.")
-                sync_to_github()
-            else:
-                print("Песня с таким названием не найдена.")
+            try:
+                idx = int(input("\nВведите номер: "))
+                if idx == 0:
+                    print("Удаление отменено.")
+                    continue
+                if 1 <= idx <= len(songs):
+                    removed_song = songs.pop(idx - 1)
+                    save_songs(songs)
+                    print(f"Песня '{removed_song['title']}' успешно удалена!")
+                    sync_to_github()
+                else:
+                    print("Неверный номер.")
+            except ValueError:
+                print("Ошибка: нужно ввести число.")
                 
         elif choice == '0':
             break
