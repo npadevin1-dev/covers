@@ -42,14 +42,18 @@ def main():
             if not songs:
                 print("Список пуст.")
             for i, s in enumerate(songs, 1):
-                print(f"{i}. {s['title']} - {s['author']}")
+                print(f"{i}. '{s['title']}' - {s['author']}")
                 
         elif choice == '2':
             print("\n--- ДОБАВЛЕНИЕ ---")
-            title = input("Название песни: ")
-            author = input("Автор: ")
-            url = input("Ссылка на Dropbox: ")
+            title = input("Название песни: ").strip() # Отрезаем пробелы
+            author = input("Автор: ").strip() # Отрезаем пробелы
+            url = input("Ссылка на Dropbox: ").strip() # Отрезаем пробелы
             
+            if not title:
+                print("Название не может быть пустым.")
+                continue
+                
             songs.append({"title": title, "author": author, "url": url})
             save_songs(songs)
             print(f"Песня '{title}' добавлена.")
@@ -57,10 +61,11 @@ def main():
             
         elif choice == '3':
             print("\n--- УДАЛЕНИЕ ---")
-            title_to_delete = input("Введите точное название песни для удаления: ")
+            title_to_delete = input("Введите точное название песни для удаления: ").strip() # Отрезаем пробелы
             
             initial_count = len(songs)
-            songs = [s for s in songs if s['title'].lower() != title_to_delete.lower()]
+            # Фильтруем список, убирая пробелы при сравнении
+            songs = [s for s in songs if s['title'].strip().lower() != title_to_delete.lower()]
             
             if len(songs) < initial_count:
                 save_songs(songs)
@@ -76,4 +81,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
