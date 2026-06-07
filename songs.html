@@ -36,24 +36,12 @@
             margin-bottom: 30px;
         }
         
-        /* Кнопка "Включить всё" в самом верху */
         .play-all-top-btn {
-            display: block;
-            width: 100%;
-            text-align: center;
-            background: linear-gradient(135deg, #121212, #1a0033);
-            color: #ffffff;
-            padding: 15px;
-            margin-bottom: 25px;
-            border-radius: 12px;
-            font-weight: bold;
-            font-size: 1.2rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            cursor: pointer;
-            border: 2px solid #ff00ff;
-            box-shadow: 0 0 10px #ff00ff;
-            box-sizing: border-box;
+            display: block; width: 100%; text-align: center;
+            background: linear-gradient(135deg, #121212, #1a0033); color: #ffffff;
+            padding: 15px; margin-bottom: 25px; border-radius: 12px; font-weight: bold;
+            font-size: 1.2rem; text-transform: uppercase; letter-spacing: 2px; cursor: pointer;
+            border: 2px solid #ff00ff; box-shadow: 0 0 10px #ff00ff; box-sizing: border-box;
             transition: transform 0.2s;
         }
         .play-all-top-btn:hover { transform: scale(1.02); }
@@ -73,7 +61,6 @@
         .album-banner-container { width: 100%; display: flex; justify-content: center; margin-bottom: 25px; }
         .album-banner { max-width: 100%; max-height: 250px; border-radius: 12px; border: 2px solid #ff0000; animation: rgb-shadow 6s infinite linear; object-fit: cover; }
 
-        /* Переключатели автомата */
         .mode-selector {
             background: #111; padding: 15px; border-radius: 12px; margin-bottom: 20px;
             display: flex; justify-content: space-around; align-items: center; border: 1px solid #333;
@@ -86,7 +73,6 @@
             background: #00ffff; color: #000; border-color: #00ffff; box-shadow: 0 0 10px #00ffff;
         }
 
-        /* Список песен */
         .song-card {
             background-color: #121212; padding: 20px; margin-bottom: 25px;
             border-radius: 12px; border: 2px solid #ff0000; animation: rgb-shadow 6s infinite linear;
@@ -157,7 +143,6 @@
             })
             .catch(err => console.error('Ошибка загрузки:', err));
 
-        // Главный экран со списком твоих альбомов
         function showAlbums() {
             if (activeAudio) { activeAudio.pause(); activeAudio = null; }
             
@@ -166,7 +151,6 @@
             document.getElementById('banner-zone').innerHTML = "";
             document.getElementById('mode-zone').innerHTML = "";
             
-            // Выводим кнопку "Включить всё" ТОЛЬКО на главной странице над альбомами
             const actionZone = document.getElementById('global-action-zone');
             actionZone.innerHTML = `<div class="play-all-top-btn" id="master-play-btn">⚡ Включить всё (Все песни схрона) ⚡</div>`;
             document.getElementById('master-play-btn').onclick = launchAutomationMode;
@@ -175,7 +159,6 @@
             content.className = "albums-grid";
             content.innerHTML = "";
 
-            // Выводим чисто твои добавленные альбомы, без лишних плиток внутри сетки
             if (globalData.albums) {
                 globalData.albums.forEach((album, idx) => {
                     const card = document.createElement('div');
@@ -191,7 +174,6 @@
             }
         }
 
-        // Запуск режима "Включить всё" по верхней кнопке
         function launchAutomationMode() {
             const virtualAlbum = {
                 title: "Все треки схрона",
@@ -205,10 +187,8 @@
             currentPlaylist = album.songs;
             currentTrackIndex = -1;
 
-            // Скрываем верхнюю кнопку "Включить всё", когда провалились внутрь альбома
             document.getElementById('global-action-zone').innerHTML = "";
 
-            // Кнопка возврата к альбомам
             const nav = document.getElementById('nav-container');
             nav.innerHTML = "";
             const backBtn = document.createElement('span');
@@ -217,14 +197,12 @@
             backBtn.onclick = showAlbums;
             nav.appendChild(backBtn);
 
-            // Баннер-гифка
             const bannerZone = document.getElementById('banner-zone');
             if (!isAutomation && album.gif_url) {
                 const rawGif = album.gif_url.replace('dl=0', 'raw=1');
                 bannerZone.innerHTML = `<div class="album-banner-container"><img src="${rawGif}" class="album-banner"></div>`;
             } else { bannerZone.innerHTML = ""; }
 
-            // Панель выбора режима автомата
             const modeZone = document.getElementById('mode-zone');
             if (isAutomation) {
                 modeZone.innerHTML = `
@@ -254,7 +232,6 @@
                 return;
             }
 
-            // Рендер треков
             album.songs.forEach((song, index) => {
                 const playUrl = song.url.replace('dl=0', 'raw=1');
                 const downloadUrl = song.url.replace('dl=0', 'dl=1');
@@ -300,7 +277,11 @@
                     btn.innerText = '▶';
                     fill.style.width = '0%';
                     card.classList.remove('playing');
-                    if (isAutomation) { playNextTrack(); }
+                    
+                    // Если включен режим автомата, перелистываем дальше
+                    if (isAutomation) {
+                        playNextTrack();
+                    }
                 });
             });
         }
@@ -330,23 +311,35 @@
             }
         }
 
+        // Исправленная и чистая логика перелистывания треков
         function playNextTrack() {
             if (currentPlaylist.length === 0) return;
-            let nextIndex = currentTrackIndex + 1;
+            
+            let nextIndex = -1;
 
             if (isRandomMode) {
+                // Если включен рандом и треков больше одного, ищем случайный индекс, отличный от старого
                 if (currentPlaylist.length > 1) {
-                    while (nextIndex === currentTrackIndex || nextIndex >= currentPlaylist.length || nextIndex < 0) {
+                    do {
                         nextIndex = Math.floor(Math.random() * currentPlaylist.length);
-                    }
-                } else { nextIndex = 0; }
+                    } while (nextIndex === currentTrackIndex);
+                } else {
+                    nextIndex = 0;
+                }
             } else {
-                if (nextIndex >= currentPlaylist.length) { nextIndex = 0; }
+                // Если режим по порядку, просто берём следующий индекс
+                nextIndex = currentTrackIndex + 1;
+                if (nextIndex >= currentPlaylist.length) {
+                    nextIndex = 0; // Зацикливаем на начало списка, если всё доиграло
+                }
             }
 
             const nextAudio = document.getElementById(`audio-${nextIndex}`);
             const nextBtn = document.getElementById(`btn-${nextIndex}`);
-            if (nextAudio && nextBtn) { handlePlayClick(nextIndex, nextAudio, nextBtn); }
+            
+            if (nextAudio && nextBtn) {
+                handlePlayClick(nextIndex, nextAudio, nextBtn);
+            }
         }
     </script>
 </body>
