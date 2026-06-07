@@ -15,6 +15,8 @@ def load_data():
             data = json.load(f)
             if "albums" not in data: data["albums"] = []
             if "all_songs" not in data: data["all_songs"] = []
+            for alb in data["albums"]:
+                if "gif_url" not in alb: alb["gif_url"] = ""
             return data
         except json.JSONDecodeError:
             return {"albums": [], "all_songs": []}
@@ -32,7 +34,7 @@ def sync_to_github():
     print("\nСинхронизация с сервером GitHub...")
     os.chdir(REPO_DIR)
     subprocess.run(["git", "add", "."], check=False)
-    subprocess.run(["git", "commit", "-m", "Обновление медиатеки"], check=False)
+    subprocess.run(["git", "commit", "-m", "Обновление медиатеки и оформлений"], check=False)
     subprocess.run(["git", "push"], check=False)
     print("Изменения успешно отправлены на сайт!\n")
 
@@ -45,7 +47,7 @@ def main():
         print("---------------------------------------------")
         print("4. Список Альбомов")
         print("5. Создать НОВЫЙ Альбом")
-        print("6. Редактировать Альбом (Добавить песню / Переименовать)")
+        print("6. Редактировать Альбом (Добавить песню / Изменить данные)")
         print("7. Удалить Альбом")
         print("---------------------------------------------")
         print("8. Перейти на сайт")
@@ -56,8 +58,7 @@ def main():
         
         if choice == '1':
             print("\n--- ВСЕ ТВОИ ЗАГРУЖЕННЫЕ ПЕСНИ ---")
-            if not data["all_songs"]:
-                print("Список пуст.")
+            if not data["all_songs"]: print("Список пуст.")
             for i, s in enumerate(data["all_songs"], 1):
                 print(f"{i}. '{s['title']}' — {s['author']}")
                 
@@ -76,8 +77,7 @@ def main():
             
         elif choice == '3':
             print("\n--- УДАЛЕНИЕ КАВЕРА ---")
-            if not data["all_songs"]:
-                print("Удалять нечего."); continue
+            if not data["all_songs"]: print("Удалять нечего."); continue
             for i, s in enumerate(data["all_songs"], 1):
                 print(f"{i}. '{s['title']}' — {s['author']}")
             try:
@@ -94,17 +94,17 @@ def main():
 
         elif choice == '4':
             print("\n--- ТЕКУЩИЕ АЛЬБОМЫ НА САЙТЕ ---")
-            if not data["albums"]:
-                print("Альбомов нет.")
+            if not data["albums"]: print("Альбомов нет.")
             for i, a in enumerate(data["albums"], 1):
-                print(f"{i}. Альбом: '{a['title']}' | Автор: '{a['author']}' (Песен: {len(a['songs'])})")
+                has_gif = "[GIF есть]" if a.get("gif_url") else "[Без обложки]"
+                print(f"{i}. Альбом: '{a['title']}' | {has_gif} (Песен: {len(a['songs'])})")
 
         elif choice == '5':
             print("\n--- СОЗДАНИЕ АЛЬБОМА ---")
             title = input("Название альбома: ").strip()
             author = input("Автор альбома: ").strip()
             if not title: print("Название не может быть пустым."); continue
-            data["albums"].append({"title": title, "author": author, "songs": []})
+            data["albums"].append({"title": title, "author": author, "songs": [], "gif_url": ""})
             save_data(data)
             print(f"Альбом '{title}' успешно создан.")
             sync_to_github()
@@ -121,13 +121,13 @@ def main():
                 selected_album = data["albums"][a_idx - 1]
                 print(f"\nВыбран альбом: '{selected_album['title']}'")
                 print("1. Добавить песню в этот альбом")
-                print("2. Изменить название или автора альбома")
+                print("2. Изменить данные (Название/Автор/GIF обложка)")
                 print("0. Отмена")
                 
                 sub_choice = input("Выберите действие: ").strip()
                 
                 if sub_choice == '1':
-                    if not data["all_songs"]: print("В глобальной базе нет песен. Сначала добавьте через пункт 2."); continue
+                    if not data["all_songs"]: print("В глобальной базе нет песен."); continue
                     print("\nКакую песню добавить в этот альбом?")
                     for i, s in enumerate(data["all_songs"], 1):
                         print(f"{i}. '{s['title']}' — {s['author']}")
@@ -136,61 +136,53 @@ def main():
                     if 1 <= s_idx <= len(data["all_songs"]):
                         song_to_add = data["all_songs"][s_idx - 1]
                         if any(s['url'] == song_to_add['url'] for s in selected_album["songs"]):
-                            print("Эта песня уже добавлена в этот альбом.")
+                            print("Эта песня уже в альбоме.")
                         else:
                             selected_album["songs"].append(song_to_add)
-                            # Автоматически обновляем автора у песни внутри альбома под автора песни, если нужно
                             save_data(data)
-                            print(f"Песня успешно добавлена в альбом!")
+                            print(f"Песня успешно добавлена!")
                             sync_to_github()
                     else: print("Неверный номер трека.")
                     
                 elif sub_choice == '2':
                     print(f"\nСтарое название: {selected_album['title']}")
-                    new_title = input("Новое название (оставь пустым, чтобы не менять): ").strip()
+                    new_title = input("Новое название (Enter чтобы пропустить): ").strip()
                     print(f"Старый автор: {selected_album['author']}")
-                    new_author = input("Новый автор (оставь пустым, чтобы не менять): ").strip()
+                    new_author = input("Новый автор (Enter чтобы пропустить): ").strip()
+                    print(f"Текущая GIF ссылка: {selected_album.get('gif_url', 'Отсутствует')}")
+                    new_gif = input("Новая ссылка на GIF с Dropbox: ").strip()
                     
                     changed = False
-                    if new_title:
-                        selected_album['title'] = new_title
-                        changed = True
-                    if new_author:
-                        selected_album['author'] = new_author
-                        changed = True
+                    if new_title: selected_album['title'] = new_title; changed = True
+                    if new_author: selected_album['author'] = new_author; changed = True
+                    if new_gif: selected_album['gif_url'] = new_gif; changed = True
                         
                     if changed:
                         save_data(data)
                         print("Данные альбома успешно изменены!")
                         sync_to_github()
-                    else:
-                        print("Изменений нет.")
-                        
-                else:
-                    print("Редактирование отменено.")
+                    else: print("Изменений нет.")
+                else: print("Отмена.")
             except ValueError: print("Ошибка ввода.")
 
         elif choice == '7':
             print("\n--- УДАЛЕНИЕ АЛЬБОМА ---")
-            if not data["albums"]: print("Нет альбомов для удаления."); continue
+            if not data["albums"]: print("Нет альбомов."); continue
             for i, a in enumerate(data["albums"], 1):
                 print(f"{i}. '{a['title']}' — {a['author']}")
             try:
                 idx = int(input("Выберите номер альбома для удаления: "))
                 if 1 <= idx <= len(data["albums"]):
-                    removed = data["albums"].pop(idx - 1)
+                    data["albums"].pop(idx - 1)
                     save_data(data)
-                    print(f"Альбом '{removed['title']}' удален с сайта.")
+                    print("Альбом удален.")
                     sync_to_github()
                 else: print("Неверный номер.")
             except ValueError: print("Ошибка.")
 
-        elif choice == '8':
-            open_browser()
-        elif choice == '0':
-            break
-        else:
-            print("Неверная команда.")
+        elif choice == '8': open_browser()
+        elif choice == '0': break
+        else: print("Неверная команда.")
 
 if __name__ == "__main__":
     main()

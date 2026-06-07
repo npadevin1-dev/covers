@@ -43,7 +43,6 @@
             margin-bottom: 30px;
         }
         
-        /* Сетка альбомов */
         .albums-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -63,7 +62,22 @@
         .album-title { font-size: 1.5rem; font-weight: bold; margin: 0 0 8px 0; color: #fff; }
         .album-author { font-size: 1rem; color: #888; margin: 0; font-style: italic; }
 
-        /* Элементы списка песен внутри альбома */
+        /* Стили для gif-баннера в альбоме */
+        .album-banner-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+        .album-banner {
+            max-width: 100%;
+            max-height: 250px;
+            border-radius: 12px;
+            border: 2px solid #ff0000;
+            animation: rgb-shadow 6s infinite linear;
+            object-fit: cover;
+        }
+
         .song-card {
             background-color: #121212;
             padding: 20px;
@@ -113,6 +127,9 @@
     </div>
     <h1 id="page-title">Выбор альбома</h1>
     
+    <!-- Сюда будет рендериться баннер-гифка -->
+    <div id="banner-zone"></div>
+    
     <div id="main-content"></div>
 
     <script>
@@ -125,7 +142,6 @@
             return `${m}:${s < 10 ? '0' : ''}${s}`;
         }
 
-        // Загрузка структуры данных
         fetch('songs.json')
             .then(res => res.json())
             .then(data => {
@@ -134,10 +150,10 @@
             })
             .catch(err => console.error('Ошибка:', err));
 
-        // Отображение сетки альбомов
         function showAlbums() {
             document.getElementById('nav-container').innerHTML = '<a href="index.html" class="back-btn">← Назад</a>';
             document.getElementById('page-title').innerText = "Выбор Альбома";
+            document.getElementById('banner-zone').innerHTML = ""; // чистим баннер
             
             const content = document.getElementById('main-content');
             content.className = "albums-grid";
@@ -161,11 +177,22 @@
             });
         }
 
-        // Отображение песен конкретного альбома
         function showSongsFromAlbum(album) {
             document.getElementById('page-title').innerText = album.title;
             
-            // Кнопка возврата к альбомам
+            // Если у альбома прописан gif-баннер, рендерим его с raw=1
+            const bannerZone = document.getElementById('banner-zone');
+            if (album.gif_url) {
+                const rawGif = album.gif_url.replace('dl=0', 'raw=1');
+                bannerZone.innerHTML = `
+                    <div class="album-banner-container">
+                        <img src="${rawGif}" class="album-banner" alt="album art">
+                    </div>
+                `;
+            } else {
+                bannerZone.innerHTML = "";
+            }
+            
             const nav = document.getElementById('nav-container');
             nav.innerHTML = "";
             const backBtn = document.createElement('span');
@@ -175,7 +202,7 @@
             nav.appendChild(backBtn);
 
             const content = document.getElementById('main-content');
-            content.className = ""; // сброс сетки гридов
+            content.className = ""; 
             content.innerHTML = "";
 
             if (!album.songs || album.songs.length === 0) {
@@ -205,7 +232,6 @@
                 `;
                 content.appendChild(card);
 
-                // Инициализация кастомного пульта
                 const audio = card.querySelector(`#audio-${index}`);
                 const btn = card.querySelector(`#btn-${index}`);
                 const bar = card.querySelector(`#bar-${index}`);
