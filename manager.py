@@ -39,13 +39,13 @@ def sync_to_github():
 def main():
     while True:
         print("\n=== ЦЕНТРАЛЬНЫЙ СХРОН УПРАВЛЕНИЯ ===")
-        print("1. Посмотреть ГЛОБАЛЬНЫЙ список песен (видишь только ты)")
+        print("1. Посмотреть ГЛОБАЛЬНЫЙ список песен")
         print("2. Добавить кавер в ГЛОБАЛЬНЫЙ список")
         print("3. Удалить кавер из ГЛОБАЛЬНОГО списка")
         print("---------------------------------------------")
         print("4. Список Альбомов")
         print("5. Создать НОВЫЙ Альбом")
-        print("6. Редактировать Альбом (Добавить песню в него)")
+        print("6. Редактировать Альбом (Добавить песню / Переименовать)")
         print("7. Удалить Альбом")
         print("---------------------------------------------")
         print("8. Перейти на сайт")
@@ -84,7 +84,6 @@ def main():
                 idx = int(input("Введите номер трека для полного удаления: "))
                 if 1 <= idx <= len(data["all_songs"]):
                     removed = data["all_songs"].pop(idx - 1)
-                    # Также вычищаем песню из всех альбомов, где она могла быть
                     for alb in data["albums"]:
                         alb["songs"] = [s for s in alb["songs"] if s['url'] != removed['url']]
                     save_data(data)
@@ -116,26 +115,59 @@ def main():
             for i, a in enumerate(data["albums"], 1):
                 print(f"{i}. '{a['title']}' — {a['author']}")
             try:
-                a_idx = int(input("Выберите номер альбома для наполнения: "))
+                a_idx = int(input("Выберите номер альбома для редактирования: "))
                 if not (1 <= a_idx <= len(data["albums"])): print("Неверный номер."); continue
                 
-                if not data["all_songs"]: print("В глобальной базе нет песен. Сначала добавьте через пункт 2."); continue
-                print("\nКакую песню добавить в этот альбом?")
-                for i, s in enumerate(data["all_songs"], 1):
-                    print(f"{i}. '{s['title']}' — {s['author']}")
+                selected_album = data["albums"][a_idx - 1]
+                print(f"\nВыбран альбом: '{selected_album['title']}'")
+                print("1. Добавить песню в этот альбом")
+                print("2. Изменить название или автора альбома")
+                print("0. Отмена")
                 
-                s_idx = int(input("Введи номер песни: "))
-                if 1 <= s_idx <= len(data["all_songs"]):
-                    selected_song = data["all_songs"][s_idx - 1]
-                    # Проверяем дубликаты в альбоме
-                    if any(s['url'] == selected_song['url'] for s in data["albums"][a_idx - 1]["songs"]):
-                        print("Эта песня уже добавлена в этот альбом.")
-                    else:
-                        data["albums"][a_idx - 1]["songs"].append(selected_song)
+                sub_choice = input("Выберите действие: ").strip()
+                
+                if sub_choice == '1':
+                    if not data["all_songs"]: print("В глобальной базе нет песен. Сначала добавьте через пункт 2."); continue
+                    print("\nКакую песню добавить в этот альбом?")
+                    for i, s in enumerate(data["all_songs"], 1):
+                        print(f"{i}. '{s['title']}' — {s['author']}")
+                    
+                    s_idx = int(input("Введи номер песни: "))
+                    if 1 <= s_idx <= len(data["all_songs"]):
+                        song_to_add = data["all_songs"][s_idx - 1]
+                        if any(s['url'] == song_to_add['url'] for s in selected_album["songs"]):
+                            print("Эта песня уже добавлена в этот альбом.")
+                        else:
+                            selected_album["songs"].append(song_to_add)
+                            # Автоматически обновляем автора у песни внутри альбома под автора песни, если нужно
+                            save_data(data)
+                            print(f"Песня успешно добавлена в альбом!")
+                            sync_to_github()
+                    else: print("Неверный номер трека.")
+                    
+                elif sub_choice == '2':
+                    print(f"\nСтарое название: {selected_album['title']}")
+                    new_title = input("Новое название (оставь пустым, чтобы не менять): ").strip()
+                    print(f"Старый автор: {selected_album['author']}")
+                    new_author = input("Новый автор (оставь пустым, чтобы не менять): ").strip()
+                    
+                    changed = False
+                    if new_title:
+                        selected_album['title'] = new_title
+                        changed = True
+                    if new_author:
+                        selected_album['author'] = new_author
+                        changed = True
+                        
+                    if changed:
                         save_data(data)
-                        print(f"Песня добавлена в альбом!")
+                        print("Данные альбома успешно изменены!")
                         sync_to_github()
-                else: print("Неверный номер трека.")
+                    else:
+                        print("Изменений нет.")
+                        
+                else:
+                    print("Редактирование отменено.")
             except ValueError: print("Ошибка ввода.")
 
         elif choice == '7':
