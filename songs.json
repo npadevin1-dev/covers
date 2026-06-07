@@ -161,7 +161,13 @@
         {
             "title": "ДЖИЗУС",
             "author": "Джизус",
-            "songs": []
+            "songs": [
+                {
+                    "title": "Девочка в классе",
+                    "author": "Джизус",
+                    "url": "https://www.dropbox.com/scl/fi/7d1ha6im8i22igv4rxc2q/.mp3?rlkey=8xqu4n3nyd8uk8s1lfowbbgl7&st=cl8rvg88&dl=0"
+                }
+            ]
         }
     ],
     "all_songs": [
