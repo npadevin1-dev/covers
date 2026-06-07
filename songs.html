@@ -26,78 +26,78 @@
             100% { box-shadow: 0 0 5px #00ffff; }
         }
         body {
-            background-color: #050505;
-            color: #ffffff;
+            background-color: #050505; color: #ffffff;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            padding: 20px;
-            max-width: 800px;
-            margin: auto;
+            padding: 20px; max-width: 800px; margin: auto;
         }
         h1 { 
-            text-align: center; 
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            font-size: 2rem;
-            animation: text-glow 4s infinite linear;
+            text-align: center; font-weight: 800; text-transform: uppercase;
+            letter-spacing: 3px; font-size: 2rem; animation: text-glow 4s infinite linear;
             margin-bottom: 30px;
         }
         
+        /* Кнопка "Включить всё" в самом верху */
+        .play-all-top-btn {
+            display: block;
+            width: 100%;
+            text-align: center;
+            background: linear-gradient(135deg, #121212, #1a0033);
+            color: #ffffff;
+            padding: 15px;
+            margin-bottom: 25px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            border: 2px solid #ff00ff;
+            box-shadow: 0 0 10px #ff00ff;
+            box-sizing: border-box;
+            transition: transform 0.2s;
+        }
+        .play-all-top-btn:hover { transform: scale(1.02); }
+
         .albums-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;
         }
         .album-card {
-            background-color: #121212;
-            padding: 25px;
-            border-radius: 12px;
-            border: 2px solid #ff0000;
-            text-align: center;
-            cursor: pointer;
-            animation: rgb-shadow 6s infinite linear;
-            transition: transform 0.2s;
+            background-color: #121212; padding: 25px; border-radius: 12px;
+            border: 2px solid #ff0000; text-align: center; cursor: pointer;
+            animation: rgb-shadow 6s infinite linear; transition: transform 0.2s;
         }
         .album-card:hover { transform: scale(1.03); }
         .album-title { font-size: 1.5rem; font-weight: bold; margin: 0 0 8px 0; color: #fff; }
         .album-author { font-size: 1rem; color: #888; margin: 0; font-style: italic; }
 
-        /* Стили для gif-баннера в альбоме */
-        .album-banner-container {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            margin-bottom: 25px;
+        .album-banner-container { width: 100%; display: flex; justify-content: center; margin-bottom: 25px; }
+        .album-banner { max-width: 100%; max-height: 250px; border-radius: 12px; border: 2px solid #ff0000; animation: rgb-shadow 6s infinite linear; object-fit: cover; }
+
+        /* Переключатели автомата */
+        .mode-selector {
+            background: #111; padding: 15px; border-radius: 12px; margin-bottom: 20px;
+            display: flex; justify-content: space-around; align-items: center; border: 1px solid #333;
         }
-        .album-banner {
-            max-width: 100%;
-            max-height: 250px;
-            border-radius: 12px;
-            border: 2px solid #ff0000;
-            animation: rgb-shadow 6s infinite linear;
-            object-fit: cover;
+        .mode-btn {
+            background: transparent; color: #aaa; border: 1px solid #444; padding: 8px 16px;
+            border-radius: 20px; cursor: pointer; font-weight: bold; transition: all 0.3s;
+        }
+        .mode-btn.active {
+            background: #00ffff; color: #000; border-color: #00ffff; box-shadow: 0 0 10px #00ffff;
         }
 
+        /* Список песен */
         .song-card {
-            background-color: #121212;
-            padding: 20px;
-            margin-bottom: 25px;
-            border-radius: 12px;
-            border: 2px solid #ff0000;
-            animation: rgb-shadow 6s infinite linear;
+            background-color: #121212; padding: 20px; margin-bottom: 25px;
+            border-radius: 12px; border: 2px solid #ff0000; animation: rgb-shadow 6s infinite linear;
         }
+        .song-card.playing { border-color: #00ffff; box-shadow: 0 0 15px #00ffff; }
         .song-title { font-size: 1.4rem; font-weight: bold; margin: 0 0 5px 0; }
         .song-author { font-size: 1rem; color: #888888; margin: 0 0 15px 0; }
 
         .custom-player {
-            display: flex;
-            align-items: center;
-            background: #1a1a1a;
-            padding: 12px;
-            border-radius: 50px;
-            margin-bottom: 15px;
-            border: 1px solid #00ffff;
-            animation: pulse-cyan 3s infinite ease-in-out;
+            display: flex; align-items: center; background: #1a1a1a; padding: 12px;
+            border-radius: 50px; margin-bottom: 15px; border: 1px solid #00ffff; animation: pulse-cyan 3s infinite ease-in-out;
         }
         .play-btn {
             background: #00ffff; border: none; width: 40px; height: 40px; border-radius: 50%;
@@ -122,18 +122,25 @@
     </style>
 </head>
 <body>
-    <div id="nav-container">
-        <a href="index.html" class="back-btn">← Назад</a>
+    <div id="top-bar">
+        <div id="nav-container">
+            <a href="index.html" class="back-btn">← Назад</a>
+        </div>
+        <div id="global-action-zone"></div>
     </div>
+
     <h1 id="page-title">Выбор альбома</h1>
     
-    <!-- Сюда будет рендериться баннер-гифка -->
     <div id="banner-zone"></div>
-    
+    <div id="mode-zone"></div>
     <div id="main-content"></div>
 
     <script>
         let globalData = null;
+        let currentPlaylist = [];
+        let currentTrackIndex = -1;
+        let isRandomMode = false;
+        let activeAudio = null;
 
         function formatTime(secs) {
             if (isNaN(secs)) return "0:00";
@@ -148,51 +155,60 @@
                 globalData = data;
                 showAlbums();
             })
-            .catch(err => console.error('Ошибка:', err));
+            .catch(err => console.error('Ошибка загрузки:', err));
 
+        // Главный экран со списком твоих альбомов
         function showAlbums() {
+            if (activeAudio) { activeAudio.pause(); activeAudio = null; }
+            
             document.getElementById('nav-container').innerHTML = '<a href="index.html" class="back-btn">← Назад</a>';
             document.getElementById('page-title').innerText = "Выбор Альбома";
-            document.getElementById('banner-zone').innerHTML = ""; // чистим баннер
+            document.getElementById('banner-zone').innerHTML = "";
+            document.getElementById('mode-zone').innerHTML = "";
             
+            // Выводим кнопку "Включить всё" ТОЛЬКО на главной странице над альбомами
+            const actionZone = document.getElementById('global-action-zone');
+            actionZone.innerHTML = `<div class="play-all-top-btn" id="master-play-btn">⚡ Включить всё (Все песни схрона) ⚡</div>`;
+            document.getElementById('master-play-btn').onclick = launchAutomationMode;
+
             const content = document.getElementById('main-content');
             content.className = "albums-grid";
             content.innerHTML = "";
 
-            if (!globalData.albums || globalData.albums.length === 0) {
-                content.innerHTML = "<p style='text-align:center; width:100%; color:#666;'>Альбомов пока нет.</p>";
-                return;
+            // Выводим чисто твои добавленные альбомы, без лишних плиток внутри сетки
+            if (globalData.albums) {
+                globalData.albums.forEach((album, idx) => {
+                    const card = document.createElement('div');
+                    card.className = "album-card";
+                    card.style.animationDelay = `${idx * 0.2}s`;
+                    card.innerHTML = `
+                        <p class="album-title">${album.title}</p>
+                        <p class="album-author">${album.author}</p>
+                    `;
+                    card.onclick = () => showSongsFromAlbum(album, false);
+                    content.appendChild(card);
+                });
             }
-
-            globalData.albums.forEach((album, idx) => {
-                const card = document.createElement('div');
-                card.className = "album-card";
-                card.style.animationDelay = `${idx * 0.3}s`;
-                card.innerHTML = `
-                    <p class="album-title">${album.title}</p>
-                    <p class="album-author">${album.author}</p>
-                `;
-                card.onclick = () => showSongsFromAlbum(album);
-                content.appendChild(card);
-            });
         }
 
-        function showSongsFromAlbum(album) {
+        // Запуск режима "Включить всё" по верхней кнопке
+        function launchAutomationMode() {
+            const virtualAlbum = {
+                title: "Все треки схрона",
+                songs: globalData.all_songs || []
+            };
+            showSongsFromAlbum(virtualAlbum, true);
+        }
+
+        function showSongsFromAlbum(album, isAutomation) {
             document.getElementById('page-title').innerText = album.title;
-            
-            // Если у альбома прописан gif-баннер, рендерим его с raw=1
-            const bannerZone = document.getElementById('banner-zone');
-            if (album.gif_url) {
-                const rawGif = album.gif_url.replace('dl=0', 'raw=1');
-                bannerZone.innerHTML = `
-                    <div class="album-banner-container">
-                        <img src="${rawGif}" class="album-banner" alt="album art">
-                    </div>
-                `;
-            } else {
-                bannerZone.innerHTML = "";
-            }
-            
+            currentPlaylist = album.songs;
+            currentTrackIndex = -1;
+
+            // Скрываем верхнюю кнопку "Включить всё", когда провалились внутрь альбома
+            document.getElementById('global-action-zone').innerHTML = "";
+
+            // Кнопка возврата к альбомам
             const nav = document.getElementById('nav-container');
             nav.innerHTML = "";
             const backBtn = document.createElement('span');
@@ -201,22 +217,51 @@
             backBtn.onclick = showAlbums;
             nav.appendChild(backBtn);
 
+            // Баннер-гифка
+            const bannerZone = document.getElementById('banner-zone');
+            if (!isAutomation && album.gif_url) {
+                const rawGif = album.gif_url.replace('dl=0', 'raw=1');
+                bannerZone.innerHTML = `<div class="album-banner-container"><img src="${rawGif}" class="album-banner"></div>`;
+            } else { bannerZone.innerHTML = ""; }
+
+            // Панель выбора режима автомата
+            const modeZone = document.getElementById('mode-zone');
+            if (isAutomation) {
+                modeZone.innerHTML = `
+                    <div class="mode-selector">
+                        <button id="btn-order" class="mode-btn ${!isRandomMode ? 'active' : ''}">По порядку</button>
+                        <button id="btn-random" class="mode-btn ${isRandomMode ? 'active' : ''}">Случайно (Рандом)</button>
+                    </div>
+                `;
+                document.getElementById('btn-order').onclick = () => {
+                    isRandomMode = false;
+                    document.getElementById('btn-order').classList.add('active');
+                    document.getElementById('btn-random').classList.remove('active');
+                };
+                document.getElementById('btn-random').onclick = () => {
+                    isRandomMode = true;
+                    document.getElementById('btn-random').classList.add('active');
+                    document.getElementById('btn-order').classList.remove('active');
+                };
+            } else { modeZone.innerHTML = ""; }
+
             const content = document.getElementById('main-content');
-            content.className = ""; 
+            content.className = "";
             content.innerHTML = "";
 
             if (!album.songs || album.songs.length === 0) {
-                content.innerHTML = "<p style='text-align:center; color:#666;'>В этом альбоме нет песен.</p>";
+                content.innerHTML = "<p style='text-align:center; color:#666;'>В этом списке пока нет песен.</p>";
                 return;
             }
 
+            // Рендер треков
             album.songs.forEach((song, index) => {
                 const playUrl = song.url.replace('dl=0', 'raw=1');
                 const downloadUrl = song.url.replace('dl=0', 'dl=1');
                 
                 const card = document.createElement('div');
                 card.className = 'song-card';
-                card.style.animationDelay = `${index * 0.4}s`;
+                card.id = `card-${index}`;
                 card.innerHTML = `
                     <p class="song-title">${song.title}</p>
                     <p class="song-author">${song.author}</p>
@@ -238,18 +283,7 @@
                 const fill = card.querySelector(`#fill-${index}`);
                 const timeDisp = card.querySelector(`#time-${index}`);
 
-                btn.addEventListener('click', () => {
-                    document.querySelectorAll('audio').forEach(a => {
-                        if (a !== audio) {
-                            a.pause();
-                            const pBtn = a.nextElementSibling;
-                            if(pBtn && pBtn.classList.contains('play-btn')) pBtn.innerText = '▶';
-                        }
-                    });
-                    if (audio.paused) { audio.play(); btn.innerText = '❚❚'; } 
-                    else { audio.pause(); btn.innerText = '▶'; }
-                });
-
+                btn.addEventListener('click', () => { handlePlayClick(index, audio, btn); });
                 audio.addEventListener('loadedmetadata', () => { timeDisp.innerText = `0:00 / ${formatTime(audio.duration)}`; });
                 audio.addEventListener('timeupdate', () => {
                     const pct = (audio.currentTime / audio.duration) * 100;
@@ -261,8 +295,58 @@
                     const pct = (e.clientX - rect.left) / rect.width;
                     audio.currentTime = pct * audio.duration;
                 });
-                audio.addEventListener('ended', () => { btn.innerText = '▶'; fill.style.width = '0%'; });
+
+                audio.addEventListener('ended', () => {
+                    btn.innerText = '▶';
+                    fill.style.width = '0%';
+                    card.classList.remove('playing');
+                    if (isAutomation) { playNextTrack(); }
+                });
             });
+        }
+
+        function handlePlayClick(index, audio, btn) {
+            if (activeAudio && activeAudio !== audio) {
+                activeAudio.pause();
+                const oldIdx = activeAudio.id.split('-')[1];
+                const oldBtn = document.getElementById(`btn-${oldIdx}`);
+                if (oldBtn) oldBtn.innerText = '▶';
+                const oldCard = document.getElementById(`card-${oldIdx}`);
+                if (oldCard) oldCard.classList.remove('playing');
+            }
+
+            const currentCard = document.getElementById(`card-${index}`);
+            if (audio.paused) {
+                audio.play();
+                btn.innerText = '❚❚';
+                currentCard.classList.add('playing');
+                activeAudio = audio;
+                currentTrackIndex = index;
+            } else {
+                audio.pause();
+                btn.innerText = '▶';
+                currentCard.classList.remove('playing');
+                activeAudio = null;
+            }
+        }
+
+        function playNextTrack() {
+            if (currentPlaylist.length === 0) return;
+            let nextIndex = currentTrackIndex + 1;
+
+            if (isRandomMode) {
+                if (currentPlaylist.length > 1) {
+                    while (nextIndex === currentTrackIndex || nextIndex >= currentPlaylist.length || nextIndex < 0) {
+                        nextIndex = Math.floor(Math.random() * currentPlaylist.length);
+                    }
+                } else { nextIndex = 0; }
+            } else {
+                if (nextIndex >= currentPlaylist.length) { nextIndex = 0; }
+            }
+
+            const nextAudio = document.getElementById(`audio-${nextIndex}`);
+            const nextBtn = document.getElementById(`btn-${nextIndex}`);
+            if (nextAudio && nextBtn) { handlePlayClick(nextIndex, nextAudio, nextBtn); }
         }
     </script>
 </body>
