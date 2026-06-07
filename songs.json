@@ -14,7 +14,13 @@
         {
             "title": "Hi Walker's",
             "author": "Alan Walker(вв моём исполнении)",
-            "songs": []
+            "songs": [
+                {
+                    "title": "Faded",
+                    "author": "Alan Walker",
+                    "url": "https://www.dropbox.com/scl/fi/qi9kt8y64eawcpslvdzem/Faded-Alan-Walker.mp3?rlkey=a9alrkmmq30mh5f23ddrudwl2&st=2rvbe511&dl=0"
+                }
+            ]
         }
     ],
     "all_songs": [
