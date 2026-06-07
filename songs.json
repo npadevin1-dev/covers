@@ -156,7 +156,13 @@
         {
             "title": "МАКС КОРЖ",
             "author": "Макс Корж",
-            "songs": []
+            "songs": [
+                {
+                    "title": "Горы по колено",
+                    "author": "Макс Корж",
+                    "url": "https://www.dropbox.com/scl/fi/la9qfo1obvq2k63w23dbb/.mp3?rlkey=emy7s8jyz865cipra9ityg280&st=pb1imm3s&dl=0"
+                }
+            ]
         }
     ],
     "all_songs": [
