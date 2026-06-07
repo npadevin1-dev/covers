@@ -403,7 +403,13 @@
         {
             "title": "СОБСТВЕННЫЕ",
             "author": "Денис М",
-            "songs": [],
+            "songs": [
+                {
+                    "title": "Гамма зари",
+                    "author": "Денис М",
+                    "url": "https://www.dropbox.com/scl/fi/x4vdl24cglj9xl2j02vwj/.mp3?rlkey=722rcynme8iyh7nny4pcdt7ta&st=i5u5u74g&dl=0"
+                }
+            ],
             "gif_url": ""
         }
     ],
