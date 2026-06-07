@@ -100,92 +100,112 @@
 
     <script>
         const canvas = document.getElementById('anarchyCanvas');
-        const ctx = canvas.getContext('2d', { willReadFrequently: true });
+        const ctx = canvas.getContext('2d');
         const width = canvas.width;
         const height = canvas.height;
+        const centerX = width / 2;
+        const centerY = height / 2;
 
-        const numParticles = 1200; // Увеличили для высокой детализации рваных краев
+        const numParticles = 1000; 
         const particles = [];
-        let targetPositions = [];
+        const targetPositions = [];
         
         let currentState = 'float'; // 'float', 'assemble', 'static'
         let stateTimer = 0;
-        let isReady = false;
 
-        // Загружаем картинку-шаблон из твоего Dropbox
-        const img = new Image();
-        img.crossOrigin = "anonymous"; 
-        img.src = "https://www.dropbox.com/scl/fi/twzpte4l2gxucq7wbvghe/abarhiA.jpg?rlkey=x95xy34xtu0wzvdrhj0xpasp3&st=1zz6r7jp&raw=1";
+        // Генерация точной геометрии рваного гранж-знака с картинки
+        function generateGrungeAnarchy() {
+            const r = 105; // Радиус кольца
 
-        img.onload = function() {
-            // Временный виртуальный холст для анализа пикселей
-            const tempCanvas = document.createElement('canvas');
-            const tempCtx = tempCanvas.getContext('2d');
-            tempCanvas.width = width;
-            tempCanvas.height = height;
-
-            // Рисуем макет по центру
-            const size = 280; 
-            tempCtx.drawImage(img, (width - size) / 2, (height - size) / 2, size, size);
-
-            // Сканируем массив пикселей
-            const imgData = tempCtx.getImageData(0, 0, width, height).data;
-
-            // Собираем все координаты, где пиксели яркие (белый цвет знака)
-            for (let y = 0; y < height; y += 2) {
-                for (let x = 0; x < width; x += 2) {
-                    const index = (y * width + x) * 4;
-                    const r = imgData[index];
-                    const g = imgData[index + 1];
-                    const b = imgData[index + 2];
-                    
-                    // Если пиксель светлее определенного порога — это наш знак
-                    if (r > 130 && g > 130 && b > 130) {
-                        targetPositions.push({ x: x, y: y });
-                    }
-                }
+            // 1. Кольцо О (с текстурными неровностями и утолщениями как на фото)
+            for (let i = 0; i < 400; i++) {
+                let angle = (i / 400) * Math.PI * 2;
+                // Добавляем микро-шум к радиусу, чтобы сымитировать текстуру кисти
+                let noise = Math.sin(angle * 12) * 3 + (Math.random() - 0.5) * 4;
+                // Локальное утолщение в некоторых частях кольца
+                let thick = (Math.random() - 0.5) * 3;
+                
+                targetPositions.push({
+                    x: centerX + (r + noise) * Math.cos(angle) + thick,
+                    y: centerY + (r + noise) * Math.sin(angle) + thick
+                });
             }
 
-            // Инициализируем частицы
-            initParticles();
-            isReady = true;
-            animate();
-        };
+            // 2. Левая стойка буквы 'А' (выходит далеко за пределы кольца вниз-влево)
+            const leftStart = { x: centerX - 100, y: centerY + 140 };
+            const topPoint = { x: centerX + 5, y: centerY - 110 }; // Смещено чуть вправо в вершине
+            for (let i = 0; i < 200; i++) {
+                let t = i / 200;
+                let noise = (Math.random() - 0.5) * 4;
+                targetPositions.push({
+                    x: leftStart.x + (topPoint.x - leftStart.x) * t + noise,
+                    y: leftStart.y + (topPoint.y - leftStart.y) * t + noise
+                });
+            }
+
+            // 3. Правая стойка буквы 'А' (идет вниз вправо, рваная текстура)
+            const rightEnd = { x: centerX + 115, y: centerY + 125 };
+            for (let i = 0; i < 200; i++) {
+                let t = i / 200;
+                let noise = (Math.random() - 0.5) * 4;
+                targetPositions.push({
+                    x: topPoint.x + (rightEnd.x - topPoint.x) * t + noise,
+                    y: topPoint.y + (rightEnd.y - topPoint.y) * t + noise
+                });
+            }
+
+            // 4. Длинная перекладина буквы 'А' (сильно вылетает за границы кольца с обеих сторон!)
+            // На картинке левый хвост перекладины острый и длинный, правый — уходит вверх-вправо
+            const barStart = { x: centerX - 135, y: centerY + 35 };
+            const barEnd = { x: centerX + 160, y: centerY - 25 };
+            for (let i = 0; i < 200; i++) {
+                let t = i / 200;
+                let noise = (Math.random() - 0.5) * 3.5;
+                targetPositions.push({
+                    x: barStart.x + (barEnd.x - barStart.x) * t + noise,
+                    y: barStart.y + (barEnd.y - barStart.y) * t + noise
+                });
+            }
+
+            // Подгоняем размер массива частиц
+            while (targetPositions.length < numParticles) {
+                targetPositions.push(targetPositions[Math.floor(Math.random() * targetPositions.length)]);
+            }
+        }
 
         function initParticles() {
             for (let i = 0; i < numParticles; i++) {
-                // Если точек на картинке меньше, берем случайную из доступных
-                const target = targetPositions[i % targetPositions.length];
-                
                 particles.push({
                     x: Math.random() * width,
                     y: Math.random() * height,
                     vx: (Math.random() - 0.5) * 2,
                     vy: (Math.random() - 0.5) * 2,
-                    size: Math.random() * 1.5 + 1,
+                    size: Math.random() * 1.6 + 1.1,
                     color: i % 2 === 0 ? '#ff00ff' : '#00ffff',
-                    targetX: target.x,
-                    targetY: target.y
+                    targetX: targetPositions[i].x,
+                    targetY: targetPositions[i].y
                 });
             }
         }
 
+        generateGrungeAnarchy();
+        initParticles();
+
         function animate() {
-            if (!isReady) return;
             ctx.clearRect(0, 0, width, height);
             stateTimer++;
 
-            // Переключение режимов анимации
-            if (currentState === 'float' && stateTimer > 200) {
+            // Фазы анимации
+            if (currentState === 'float' && stateTimer > 220) {
                 currentState = 'assemble';
                 stateTimer = 0;
-            } else if (currentState === 'assemble' && stateTimer > 60) {
+            } else if (currentState === 'assemble' && stateTimer > 55) {
                 currentState = 'static';
                 stateTimer = 0;
-            } else if (currentState === 'static' && stateTimer > 180) {
+            } else if (currentState === 'static' && stateTimer > 150) {
                 currentState = 'float';
                 stateTimer = 0;
-                // Эффект взрывного распада
+                // Импульс взрыва при распаде
                 particles.forEach(p => {
                     p.vx = (Math.random() - 0.5) * 7;
                     p.vy = (Math.random() - 0.5) * 7;
@@ -196,21 +216,21 @@
                 if (currentState === 'float') {
                     p.x += p.vx;
                     p.y += p.vy;
-                    p.vx *= 0.97;
-                    p.vy *= 0.97;
+                    p.vx *= 0.98;
+                    p.vy *= 0.98;
 
                     if (p.x < 0 || p.x > width) p.vx *= -1;
                     if (p.y < 0 || p.y > height) p.vy *= -1;
 
                 } else if (currentState === 'assemble') {
-                    // Коэффициент 0.22 дает очень резкое, агрессивное стягивание
-                    p.x += (p.targetX - p.x) * 0.22;
-                    p.y += (p.targetY - p.y) * 0.22;
+                    // Быстрое стягивание в форму знака
+                    p.x += (p.targetX - p.x) * 0.24;
+                    p.y += (p.targetY - p.y) * 0.24;
 
                 } else if (currentState === 'static') {
-                    // Текстурный шум (эффект легкого кипения внутри знака)
-                    p.x = p.targetX + (Math.random() - 0.5) * 0.8;
-                    p.y = p.targetY + (Math.random() - 0.5) * 0.8;
+                    // Микро-вибрация точек, воспроизводящая эффект «живого» шума
+                    p.x = p.targetX + (Math.random() - 0.5) * 0.9;
+                    p.y = p.targetY + (Math.random() - 0.5) * 0.9;
                 }
 
                 ctx.beginPath();
@@ -230,6 +250,8 @@
             ctx.shadowBlur = 0;
             requestAnimationFrame(animate);
         }
+
+        animate();
     </script>
 </body>
 </html>
