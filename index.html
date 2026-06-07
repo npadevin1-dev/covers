@@ -30,6 +30,8 @@
             flex-direction: column;
             align-items: center;
             overflow-x: hidden;
+            min-height: 100vh;
+            justify-content: center;
         }
 
         h1 {
@@ -38,16 +40,9 @@
             letter-spacing: 4px;
             font-size: 2.5rem;
             animation: text-glow 4s infinite linear;
-            margin-top: 20px;
-            margin-bottom: 10px;
-            text-align: center;
-        }
-
-        .subtitle {
-            color: #666;
-            font-style: italic;
-            font-size: 1rem;
+            margin-top: 0;
             margin-bottom: 40px;
+            text-align: center;
         }
 
         /* ТРЁХМЕРНАЯ СЦЕНА ОРБИТЫ */
@@ -56,7 +51,7 @@
             width: 300px;
             height: 300px;
             margin-bottom: 50px;
-            perspective: 1000px; /* Глубина 3D пространства */
+            perspective: 1000px;
         }
 
         /* Центральный статичный знак анархии */
@@ -67,11 +62,11 @@
             width: 130px;
             height: 130px;
             object-fit: contain;
-            z-index: 10; /* Держим посередине слоев */
+            z-index: 10;
             animation: pulse-glow 4s infinite ease-in-out;
         }
 
-        /* Вращающийся невидимый контейнер-карусель */
+        /* Вращающийся контейнер */
         .carousel {
             position: absolute;
             width: 100%;
@@ -88,18 +83,17 @@
             width: 70px;
             height: 70px;
             object-fit: contain;
-            /* Смягчаем пиксели при вращении */
             backface-visibility: visible; 
         }
 
-        /* Расталкиваем иконки по кругу (угол Y) и выносим вперед по оси Z (радиус орбиты) */
-        .icon-unity {
+        /* Орбиты для трех значков разработки */
+        .icon-first {
             transform: rotateY(0deg) translateZ(140px);
         }
-        .icon-fl {
+        .icon-second {
             transform: rotateY(120deg) translateZ(140px);
         }
-        .icon-blender {
+        .icon-third {
             transform: rotateY(240deg) translateZ(140px);
         }
 
@@ -107,7 +101,6 @@
         .menu-container {
             display: flex;
             flex-direction: column;
-            gap: 15px;
             width: 100%;
             max-width: 400px;
         }
@@ -141,32 +134,26 @@
 <body>
 
     <h1>Кавер Схрон</h1>
-    <div class="subtitle">madikens mod v3.0</div>
 
     <div class="scene3d">
-        <img src="anarchy.png" class="center-logo" alt="Anarchy">
+        <img src="https://www.dropbox.com/scl/fi/twzpte4l2gxucq7wbvghe/abarhiA.jpg?rlkey=x95xy34xtu0wzvdrhj0xpasp3&st=1zz6r7jp&raw=1" class="center-logo" alt="Anarchy">
         
         <div class="carousel" id="carousel">
-            <img src="unity.png" class="orbit-icon icon-unity" id="img-unity" alt="Unity">
-            <img src="flstudio.png" class="orbit-icon icon-fl" id="img-fl" alt="FL Studio">
-            <img src="blender.png" class="orbit-icon icon-blender" id="img-blender" alt="Blender">
+            <img src="https://www.dropbox.com/scl/fi/fq6pza0xmcsiolnen4q2n/images-3.png?rlkey=btq58a9hjdh85rzpbjcl18tkg&st=ypitb8f9&raw=1" class="orbit-icon icon-first" alt="Icon 1">
+            <img src="https://www.dropbox.com/scl/fi/c6zki16pnxurn9pwjyprp/images.png?rlkey=zssb39zo5uvmpwvz98p2zzyx1&st=npgw6wqo&raw=1" class="orbit-icon icon-second" alt="Icon 2">
+            <img src="https://www.dropbox.com/scl/fi/xyxrkrw36hc007rh9bdi6/images-2.png?rlkey=ki7h01xn3by3uq6w683l66ez9&st=ftytjoce&raw=1" class="orbit-icon icon-third" alt="Icon 3">
         </div>
     </div>
 
     <div class="menu-container">
         <a href="songs.html" class="menu-btn">🎵 Выбрать песни / Плеер</a>
-        <button class="menu-btn" onclick="alert('Запусти менеджер в Termux для редактирования базы данных!')">🛠 Управление схроном</button>
     </div>
 
     <script>
-        // Небольшой скрипт для компенсации вращения. 
-        // Чтобы сами значки во время полета по кругу не разворачивались к нам ребром/боком,
-        // мы динамически разворачиваем их плоскость обратно на зрителя.
         const carousel = document.getElementById('carousel');
         const icons = document.querySelectorAll('.orbit-icon');
 
         function updateIconsFaces() {
-            // Получаем текущую матрицу трансформации карусели и вычисляем угол
             const computedStyle = window.getComputedStyle(carousel);
             const transform = computedStyle.getPropertyValue('transform');
             
@@ -174,27 +161,22 @@
             if (transform && transform !== 'none') {
                 const values = transform.split('(')[1].split(')')[0].split(',');
                 const a = values[0];
-                const b = values[1];
                 const c = values[2];
-                const d = values[4];
-                // Вытаскиваем приблизительный текущий угол поворота карусели по оси Y
                 angle = Math.round(Math.atan2(parseFloat(c), parseFloat(a)) * (180 / Math.PI));
             }
 
-            // Корректируем слои (Z-Index) на лету, чтобы иконки корректно заходили ЗА знак анархии
             icons.forEach(icon => {
                 let initialRotation = 0;
-                if (icon.classList.contains('icon-unity')) initialRotation = 0;
-                if (icon.classList.contains('icon-fl')) initialRotation = 120;
-                if (icon.classList.contains('icon-blender')) initialRotation = 240;
+                if (icon.classList.contains('icon-first')) initialRotation = 0;
+                if (icon.classList.contains('icon-second')) initialRotation = 120;
+                if (icon.classList.contains('icon-third')) initialRotation = 240;
 
-                // Суммарный абсолютный угол положения значка в пространстве относительно экрана
                 const currentAbsoluteAngle = (angle + initialRotation) % 360;
 
-                // Если значок ушел на заднюю полусферу (от 90 до 270 градусов), понижаем его слой
+                // Управление перекрытием слоев: когда значок сзади — уводим его за анархию
                 if (currentAbsoluteAngle > 90 && currentAbsoluteAngle < 270) {
                     icon.style.zIndex = "5"; 
-                    icon.style.opacity = "0.6"; // Немного притеняем на заднем плане для реализма
+                    icon.style.opacity = "0.5";
                 } else {
                     icon.style.zIndex = "15";
                     icon.style.opacity = "1";
@@ -204,7 +186,6 @@
             requestAnimationFrame(updateIconsFaces);
         }
 
-        // Запускаем постоянный трекинг слоев
         updateIconsFaces();
     </script>
 </body>
