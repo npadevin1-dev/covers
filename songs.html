@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Список песен</title>
+    <title>Альбомы</title>
     <style>
         @keyframes rgb-shadow {
             0% { border-color: #ff0000; box-shadow: 0 0 10px #ff0000; }
@@ -15,19 +15,16 @@
             90% { border-color: #ff00ff; box-shadow: 0 0 10px #ff00ff; }
             100% { border-color: #ff0000; box-shadow: 0 0 10px #ff0000; }
         }
-
         @keyframes text-glow {
             0% { color: #ff00ff; text-shadow: 0 0 5px #ff00ff; }
             50% { color: #00ffff; text-shadow: 0 0 5px #00ffff; }
             100% { color: #ff00ff; text-shadow: 0 0 5px #ff00ff; }
         }
-
         @keyframes pulse-cyan {
             0% { box-shadow: 0 0 5px #00ffff; }
             50% { box-shadow: 0 0 15px #00ffff; }
             100% { box-shadow: 0 0 5px #00ffff; }
         }
-
         body {
             background-color: #050505;
             color: #ffffff;
@@ -36,7 +33,6 @@
             max-width: 800px;
             margin: auto;
         }
-        
         h1 { 
             text-align: center; 
             font-weight: 800;
@@ -44,8 +40,30 @@
             letter-spacing: 3px;
             font-size: 2rem;
             animation: text-glow 4s infinite linear;
+            margin-bottom: 30px;
         }
+        
+        /* Сетка альбомов */
+        .albums-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .album-card {
+            background-color: #121212;
+            padding: 25px;
+            border-radius: 12px;
+            border: 2px solid #ff0000;
+            text-align: center;
+            cursor: pointer;
+            animation: rgb-shadow 6s infinite linear;
+            transition: transform 0.2s;
+        }
+        .album-card:hover { transform: scale(1.03); }
+        .album-title { font-size: 1.5rem; font-weight: bold; margin: 0 0 8px 0; color: #fff; }
+        .album-author { font-size: 1rem; color: #888; margin: 0; font-style: italic; }
 
+        /* Элементы списка песен внутри альбома */
         .song-card {
             background-color: #121212;
             padding: 20px;
@@ -54,20 +72,9 @@
             border: 2px solid #ff0000;
             animation: rgb-shadow 6s infinite linear;
         }
+        .song-title { font-size: 1.4rem; font-weight: bold; margin: 0 0 5px 0; }
+        .song-author { font-size: 1rem; color: #888888; margin: 0 0 15px 0; }
 
-        .song-title { 
-            font-size: 1.4rem; 
-            font-weight: bold; 
-            margin: 0 0 5px 0;
-        }
-
-        .song-author { 
-            font-size: 1rem; 
-            color: #888888; 
-            margin: 0 0 15px 0;
-        }
-
-        /* КАСТОМНЫЙ ПЛЕЕР СТИЛИ */
         .custom-player {
             display: flex;
             align-items: center;
@@ -78,85 +85,39 @@
             border: 1px solid #00ffff;
             animation: pulse-cyan 3s infinite ease-in-out;
         }
-
         .play-btn {
-            background: #00ffff;
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            color: #000;
-            font-weight: bold;
-            font-size: 1.2rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 15px;
-            outline: none;
+            background: #00ffff; border: none; width: 40px; height: 40px; border-radius: 50%;
+            color: #000; font-weight: bold; font-size: 1.2rem; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; margin-right: 15px; outline: none;
         }
-
-        .progress-bar {
-            flex-grow: 1;
-            height: 6px;
-            background: #333;
-            border-radius: 3px;
-            position: relative;
-            cursor: pointer;
-            margin-right: 15px;
-        }
-
-        .progress-fill {
-            height: 100%;
-            width: 0%;
-            background: #00ffff;
-            border-radius: 3px;
-            box-shadow: 0 0 8px #00ffff;
-        }
-
-        .time-display {
-            font-size: 0.85rem;
-            color: #00ffff;
-            font-family: monospace;
-            white-space: nowrap;
-        }
+        .progress-bar { flex-grow: 1; height: 6px; background: #333; border-radius: 3px; position: relative; cursor: pointer; margin-right: 15px; }
+        .progress-fill { height: 100%; width: 0%; background: #00ffff; border-radius: 3px; box-shadow: 0 0 8px #00ffff; }
+        .time-display { font-size: 0.85rem; color: #00ffff; font-family: monospace; white-space: nowrap; }
         
         .download-btn {
-            display: inline-block;
-            background-color: transparent;
-            color: #ffffff;
-            padding: 10px 20px;
-            font-size: 0.9rem;
-            text-decoration: none;
-            border-radius: 6px;
-            font-weight: bold;
-            border: 1px solid #ffffff;
-            transition: all 0.3s ease;
+            display: inline-block; background-color: transparent; color: #ffffff; padding: 10px 20px;
+            font-size: 0.9rem; text-decoration: none; border-radius: 6px; font-weight: bold;
+            border: 1px solid #ffffff; transition: all 0.3s ease;
         }
-
-        .download-btn:hover {
-            background-color: #ffffff;
-            color: #000000;
-            box-shadow: 0 0 15px #ffffff;
-        }
+        .download-btn:hover { background-color: #ffffff; color: #000000; box-shadow: 0 0 15px #ffffff; }
         
         .back-btn {
-            display: inline-block;
-            margin-bottom: 25px;
-            color: #aaa;
-            text-decoration: none;
-            border: 1px solid #444;
-            padding: 6px 18px;
-            border-radius: 6px;
+            display: inline-block; margin-bottom: 25px; color: #aaa; text-decoration: none;
+            border: 1px solid #444; padding: 6px 18px; border-radius: 6px; cursor: pointer;
         }
     </style>
 </head>
 <body>
-    <a href="index.html" class="back-btn">← Назад</a>
-    <h1>Список песен</h1>
-    <div id="song-list"></div>
+    <div id="nav-container">
+        <a href="index.html" class="back-btn">← Назад</a>
+    </div>
+    <h1 id="page-title">Выбор альбома</h1>
+    
+    <div id="main-content"></div>
 
     <script>
+        let globalData = null;
+
         function formatTime(secs) {
             if (isNaN(secs)) return "0:00";
             const m = Math.floor(secs / 60);
@@ -164,84 +125,119 @@
             return `${m}:${s < 10 ? '0' : ''}${s}`;
         }
 
+        // Загрузка структуры данных
         fetch('songs.json')
-            .then(response => response.json())
+            .then(res => res.json())
             .then(data => {
-                const list = document.getElementById('song-list');
-                data.forEach((song, index) => {
-                    const playUrl = song.url.replace('dl=0', 'raw=1');
-                    const downloadUrl = song.url.replace('dl=0', 'dl=1');
-                    
-                    const card = document.createElement('div');
-                    card.className = 'song-card';
-                    card.style.animationDelay = `${index * 0.5}s`;
-                    
-                    card.innerHTML = `
-                        <p class="song-title">${song.title}</p>
-                        <p class="song-author">${song.author}</p>
-                        
-                        <div class="custom-player">
-                            <audio id="audio-${index}" src="${playUrl}" preload="metadata"></audio>
-                            <button class="play-btn" id="btn-${index}">▶</button>
-                            <div class="progress-bar" id="bar-${index}">
-                                <div class="progress-fill" id="fill-${index}"></div>
-                            </div>
-                            <span class="time-display" id="time-${index}">0:00 / 0:00</span>
+                globalData = data;
+                showAlbums();
+            })
+            .catch(err => console.error('Ошибка:', err));
+
+        // Отображение сетки альбомов
+        function showAlbums() {
+            document.getElementById('nav-container').innerHTML = '<a href="index.html" class="back-btn">← Назад</a>';
+            document.getElementById('page-title').innerText = "Выбор Альбома";
+            
+            const content = document.getElementById('main-content');
+            content.className = "albums-grid";
+            content.innerHTML = "";
+
+            if (!globalData.albums || globalData.albums.length === 0) {
+                content.innerHTML = "<p style='text-align:center; width:100%; color:#666;'>Альбомов пока нет.</p>";
+                return;
+            }
+
+            globalData.albums.forEach((album, idx) => {
+                const card = document.createElement('div');
+                card.className = "album-card";
+                card.style.animationDelay = `${idx * 0.3}s`;
+                card.innerHTML = `
+                    <p class="album-title">${album.title}</p>
+                    <p class="album-author">${album.author}</p>
+                `;
+                card.onclick = () => showSongsFromAlbum(album);
+                content.appendChild(card);
+            });
+        }
+
+        // Отображение песен конкретного альбома
+        function showSongsFromAlbum(album) {
+            document.getElementById('page-title').innerText = album.title;
+            
+            // Кнопка возврата к альбомам
+            const nav = document.getElementById('nav-container');
+            nav.innerHTML = "";
+            const backBtn = document.createElement('span');
+            backBtn.className = "back-btn";
+            backBtn.innerText = "← К альбомам";
+            backBtn.onclick = showAlbums;
+            nav.appendChild(backBtn);
+
+            const content = document.getElementById('main-content');
+            content.className = ""; // сброс сетки гридов
+            content.innerHTML = "";
+
+            if (!album.songs || album.songs.length === 0) {
+                content.innerHTML = "<p style='text-align:center; color:#666;'>В этом альбоме нет песен.</p>";
+                return;
+            }
+
+            album.songs.forEach((song, index) => {
+                const playUrl = song.url.replace('dl=0', 'raw=1');
+                const downloadUrl = song.url.replace('dl=0', 'dl=1');
+                
+                const card = document.createElement('div');
+                card.className = 'song-card';
+                card.style.animationDelay = `${index * 0.4}s`;
+                card.innerHTML = `
+                    <p class="song-title">${song.title}</p>
+                    <p class="song-author">${song.author}</p>
+                    <div class="custom-player">
+                        <audio id="audio-${index}" src="${playUrl}" preload="metadata"></audio>
+                        <button class="play-btn" id="btn-${index}">▶</button>
+                        <div class="progress-bar" id="bar-${index}">
+                            <div class="progress-fill" id="fill-${index}"></div>
                         </div>
-                        
-                        <a href="${downloadUrl}" download class="download-btn">Скачать песню</a>
-                    `;
-                    list.appendChild(card);
+                        <span class="time-display" id="time-${index}">0:00 / 0:00</span>
+                    </div>
+                    <a href="${downloadUrl}" download class="download-btn">Скачать песню</a>
+                `;
+                content.appendChild(card);
 
-                    // Логика кастомного плеера
-                    const audio = card.querySelector(`#audio-${index}`);
-                    const btn = card.querySelector(`#btn-${index}`);
-                    const bar = card.querySelector(`#bar-${index}`);
-                    const fill = card.querySelector(`#fill-${index}`);
-                    const timeDisp = card.querySelector(`#time-${index}`);
+                // Инициализация кастомного пульта
+                const audio = card.querySelector(`#audio-${index}`);
+                const btn = card.querySelector(`#btn-${index}`);
+                const bar = card.querySelector(`#bar-${index}`);
+                const fill = card.querySelector(`#fill-${index}`);
+                const timeDisp = card.querySelector(`#time-${index}`);
 
-                    btn.addEventListener('click', () => {
-                        // Останавливаем другие плееры, если они играют
-                        document.querySelectorAll('audio').forEach(a => {
-                            if (a !== audio) {
-                                a.pause();
-                                const pBtn = a.nextElementSibling;
-                                if(pBtn && pBtn.classList.contains('play-btn')) pBtn.innerText = '▶';
-                            }
-                        });
-
-                        if (audio.paused) {
-                            audio.play();
-                            btn.innerText = '❚❚';
-                        } else {
-                            audio.pause();
-                            btn.innerText = '▶';
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('audio').forEach(a => {
+                        if (a !== audio) {
+                            a.pause();
+                            const pBtn = a.nextElementSibling;
+                            if(pBtn && pBtn.classList.contains('play-btn')) pBtn.innerText = '▶';
                         }
                     });
-
-                    audio.addEventListener('loadedmetadata', () => {
-                        timeDisp.innerText = `0:00 / ${formatTime(audio.duration)}`;
-                    });
-
-                    audio.addEventListener('timeupdate', () => {
-                        const pct = (audio.currentTime / audio.duration) * 100;
-                        fill.style.width = `${pct}%`;
-                        timeDisp.innerText = `${formatTime(audio.currentTime)} / ${formatTime(audio.duration)}`;
-                    });
-
-                    bar.addEventListener('click', (e) => {
-                        const rect = bar.getBoundingClientRect();
-                        const pct = (e.clientX - rect.left) / rect.width;
-                        audio.currentTime = pct * audio.duration;
-                    });
-                    
-                    audio.addEventListener('ended', () => {
-                        btn.innerText = '▶';
-                        fill.style.width = '0%';
-                    });
+                    if (audio.paused) { audio.play(); btn.innerText = '❚❚'; } 
+                    else { audio.pause(); btn.innerText = '▶'; }
                 });
-            })
-            .catch(err => console.error('Ошибка загрузки:', err));
+
+                audio.addEventListener('loadedmetadata', () => { timeDisp.innerText = `0:00 / ${formatTime(audio.duration)}`; });
+                audio.addEventListener('timeupdate', () => {
+                    const pct = (audio.currentTime / audio.duration) * 100;
+                    fill.style.width = `${pct}%`;
+                    timeDisp.innerText = `${formatTime(audio.currentTime)} / ${formatTime(audio.duration)}`;
+                });
+                bar.addEventListener('click', (e) => {
+                    const rect = bar.getBoundingClientRect();
+                    const pct = (e.clientX - rect.left) / rect.width;
+                    audio.currentTime = pct * audio.duration;
+                });
+                audio.addEventListener('ended', () => { btn.innerText = '▶'; fill.style.width = '0%'; });
+            });
+        }
     </script>
 </body>
 </html>

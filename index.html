@@ -15,13 +15,11 @@
             90% { border-color: #ff00ff; box-shadow: 0 0 15px #ff00ff; }
             100% { border-color: #ff0000; box-shadow: 0 0 15px #ff0000; }
         }
-
         @keyframes title-neon {
             0% { color: #00ffff; text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff; }
             50% { color: #ff00ff; text-shadow: 0 0 10px #ff00ff, 0 0 30px #ff00ff; }
             100% { color: #00ffff; text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff; }
         }
-
         body {
             background-color: #050505;
             color: #ffffff;
@@ -36,17 +34,14 @@
             box-sizing: border-box;
             overflow: hidden;
         }
-
         h1 {
             font-size: 2.5rem;
             margin-bottom: 40px;
             text-transform: uppercase;
             letter-spacing: 4px;
-            white-space: nowrap;
             text-align: center;
             animation: title-neon 4s infinite ease-in-out;
         }
-
         .btn {
             background-color: transparent;
             color: #ffffff;
@@ -61,10 +56,7 @@
             animation: rgb-glow 4s infinite linear;
             transition: transform 0.2s;
         }
-
-        .btn:hover, .btn:active {
-            transform: scale(1.05);
-        }
+        .btn:hover, .btn:active { transform: scale(1.05); }
     </style>
 </head>
 <body>
