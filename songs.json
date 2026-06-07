@@ -462,7 +462,13 @@
         {
             "title": "ЧЕРНИКОВСКАЯ ХАТА",
             "author": "Черниковская хата",
-            "songs": [],
+            "songs": [
+                {
+                    "title": "Спектакль кончен",
+                    "author": "Черниковская хата",
+                    "url": "https://www.dropbox.com/scl/fi/3pn1uoom89ox00w8hkaj5/.mp3?rlkey=7g164aste4tr2xf74rfumbkg5&st=utzuyq82&dl=0"
+                }
+            ],
             "gif_url": ""
         }
     ],
