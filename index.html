@@ -38,7 +38,6 @@
             z-index: 10;
         }
 
-        /* КОНТЕЙНЕР ДЛЯ АНИМАЦИИ */
         .canvas-container {
             position: relative;
             width: 350px;
@@ -53,7 +52,6 @@
             height: 100%;
         }
 
-        /* БЛОК НАВИГАЦИИ */
         .menu-container {
             display: flex;
             flex-direction: column;
@@ -102,148 +100,124 @@
 
     <script>
         const canvas = document.getElementById('anarchyCanvas');
-        const ctx = canvas.getContext('2d');
+        const ctx = canvas.getContext('2d', { willReadFrequently: true });
         const width = canvas.width;
         const height = canvas.height;
-        const centerX = width / 2;
-        const centerY = height / 2;
 
-        const numParticles = 550; // Количество точек
+        const numParticles = 1200; // Увеличили для высокой детализации рваных краев
         const particles = [];
+        let targetPositions = [];
         
-        // Состояния: 'float' (плавают), 'assemble' (собираются), 'static' (замерли в знаке)
-        let currentState = 'float'; 
+        let currentState = 'float'; // 'float', 'assemble', 'static'
         let stateTimer = 0;
+        let isReady = false;
 
-        // Геометрия знака анархии (координаты целевых точек)
-        const targetPositions = [];
+        // Загружаем картинку-шаблон из твоего Dropbox
+        const img = new Image();
+        img.crossOrigin = "anonymous"; 
+        img.src = "https://www.dropbox.com/scl/fi/twzpte4l2gxucq7wbvghe/abarhiA.jpg?rlkey=x95xy34xtu0wzvdrhj0xpasp3&st=1zz6r7jp&raw=1";
 
-        // Функция генерации математической модели знака анархии
-        function generateAnarchyTargets() {
-            const r = 110; // Радиус кольца анархии
-            
-            // 1. Окружность (буква О)
-            for (let i = 0; i < 220; i++) {
-                let angle = (i / 220) * Math.PI * 2;
-                targetPositions.push({
-                    x: centerX + r * Math.cos(angle),
-                    y: centerY + r * Math.sin(angle)
-                });
+        img.onload = function() {
+            // Временный виртуальный холст для анализа пикселей
+            const tempCanvas = document.createElement('canvas');
+            const tempCtx = tempCanvas.getContext('2d');
+            tempCanvas.width = width;
+            tempCanvas.height = height;
+
+            // Рисуем макет по центру
+            const size = 280; 
+            tempCtx.drawImage(img, (width - size) / 2, (height - size) / 2, size, size);
+
+            // Сканируем массив пикселей
+            const imgData = tempCtx.getImageData(0, 0, width, height).data;
+
+            // Собираем все координаты, где пиксели яркие (белый цвет знака)
+            for (let y = 0; y < height; y += 2) {
+                for (let x = 0; x < width; x += 2) {
+                    const index = (y * width + x) * 4;
+                    const r = imgData[index];
+                    const g = imgData[index + 1];
+                    const b = imgData[index + 2];
+                    
+                    // Если пиксель светлее определенного порога — это наш знак
+                    if (r > 130 && g > 130 && b > 130) {
+                        targetPositions.push({ x: x, y: y });
+                    }
+                }
             }
 
-            // 2. Левая палочка буквы А (снизу вверх)
-            // Идет от (~220, 290) до (200, 90)
-            const leftLegStart = { x: centerX - r * 0.5, y: centerY + r * 0.85 };
-            const topPoint = { x: centerX, y: centerY - r * 0.95 };
-            for (let i = 0; i < 110; i++) {
-                let t = i / 110;
-                targetPositions.push({
-                    x: leftLegStart.x + (topPoint.x - leftLegStart.x) * t,
-                    y: leftLegStart.y + (topPoint.y - leftLegStart.y) * t
-                });
-            }
+            // Инициализируем частицы
+            initParticles();
+            isReady = true;
+            animate();
+        };
 
-            // 3. Правая палочка буквы А (сверху вниз)
-            const rightLegEnd = { x: centerX + r * 0.5, y: centerY + r * 0.85 };
-            for (let i = 0; i < 110; i++) {
-                let t = i / 110;
-                targetPositions.push({
-                    x: topPoint.x + (rightLegEnd.x - topPoint.x) * t,
-                    y: topPoint.y + (rightLegEnd.y - topPoint.y) * t
-                });
-            }
-
-            // 4. Горизонтальная перекладина буквы А (выходящая за границы)
-            const barStart = { x: centerX - r * 0.85, y: centerY + r * 0.15 };
-            const barEnd = { x: centerX + r * 0.85, y: centerY + r * 0.15 };
-            for (let i = 0; i < 110; i++) {
-                let t = i / 110;
-                targetPositions.push({
-                    x: barStart.x + (barEnd.x - barStart.x) * t,
-                    y: barStart.y + (barEnd.y - barStart.y) * t
-                });
-            }
-
-            // Если частиц больше, чем точек в модели, дублируем их
-            while (targetPositions.length < numParticles) {
-                targetPositions.push(targetPositions[Math.floor(Math.random() * targetPositions.length)]);
-            }
-        }
-
-        // Инициализация точек
         function initParticles() {
             for (let i = 0; i < numParticles; i++) {
+                // Если точек на картинке меньше, берем случайную из доступных
+                const target = targetPositions[i % targetPositions.length];
+                
                 particles.push({
                     x: Math.random() * width,
                     y: Math.random() * height,
-                    vx: (Math.random() - 0.5) * 1.5,
-                    vy: (Math.random() - 0.5) * 1.5,
-                    size: Math.random() * 2 + 1.2,
-                    color: i % 2 === 0 ? '#ff00ff' : '#00ffff', // Неоновые цвета точек
-                    targetX: targetPositions[i].x,
-                    targetY: targetPositions[i].y
+                    vx: (Math.random() - 0.5) * 2,
+                    vy: (Math.random() - 0.5) * 2,
+                    size: Math.random() * 1.5 + 1,
+                    color: i % 2 === 0 ? '#ff00ff' : '#00ffff',
+                    targetX: target.x,
+                    targetY: target.y
                 });
             }
         }
 
-        generateAnarchyTargets();
-        initParticles();
-
-        // Главный цикл анимации
         function animate() {
+            if (!isReady) return;
             ctx.clearRect(0, 0, width, height);
             stateTimer++;
 
-            // Машина состояний тайминга
-            if (currentState === 'float' && stateTimer > 240) { // 4 секунды плавают
+            // Переключение режимов анимации
+            if (currentState === 'float' && stateTimer > 200) {
                 currentState = 'assemble';
                 stateTimer = 0;
-            } else if (currentState === 'assemble' && stateTimer > 60) { // 1 секунда на резкий сбор
+            } else if (currentState === 'assemble' && stateTimer > 60) {
                 currentState = 'static';
                 stateTimer = 0;
-            } else if (currentState === 'static' && stateTimer > 180) { // 3 секунды стоят в форме знака
+            } else if (currentState === 'static' && stateTimer > 180) {
                 currentState = 'float';
                 stateTimer = 0;
-                // При распаде даем мощный импульс скорости ("взрыв")
+                // Эффект взрывного распада
                 particles.forEach(p => {
-                    p.vx = (Math.random() - 0.5) * 6;
-                    p.vy = (Math.random() - 0.5) * 6;
+                    p.vx = (Math.random() - 0.5) * 7;
+                    p.vy = (Math.random() - 0.5) * 7;
                 });
             }
 
-            // Обновление и отрисовка точек
             particles.forEach(p => {
                 if (currentState === 'float') {
-                    // Точки просто лениво плавают, отражаясь от невидимых стен
                     p.x += p.vx;
                     p.y += p.vy;
-
-                    // Плавное замедление после взрыва до нормальной скорости
-                    p.vx *= 0.98;
-                    p.vy *= 0.98;
+                    p.vx *= 0.97;
+                    p.vy *= 0.97;
 
                     if (p.x < 0 || p.x > width) p.vx *= -1;
                     if (p.y < 0 || p.y > height) p.vy *= -1;
 
                 } else if (currentState === 'assemble') {
-                    // Резко стягиваются к заготовленным координатам знака анархии
-                    // Используем интерполяцию для эффекта разгона-торможения
-                    p.x += (p.targetX - p.x) * 0.18;
-                    p.y += (p.targetY - p.y) * 0.18;
+                    // Коэффициент 0.22 дает очень резкое, агрессивное стягивание
+                    p.x += (p.targetX - p.x) * 0.22;
+                    p.y += (p.targetY - p.y) * 0.22;
 
                 } else if (currentState === 'static') {
-                    // Стоят на месте, совершая едва заметное тепловое дрожание (микро-хаос)
-                    p.x = p.targetX + (Math.random() - 0.5) * 0.6;
-                    p.y = p.targetY + (Math.random() - 0.5) * 0.6;
+                    // Текстурный шум (эффект легкого кипения внутри знака)
+                    p.x = p.targetX + (Math.random() - 0.5) * 0.8;
+                    p.y = p.targetY + (Math.random() - 0.5) * 0.8;
                 }
 
-                // Рисуем точку
                 ctx.beginPath();
                 ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-                
-                // Эффект неонового свечения вокруг каждой точки знака в момент сбора
+
                 if (currentState !== 'float') {
-                    ctx.shadowBlur = 10;
+                    ctx.shadowBlur = 8;
                     ctx.shadowColor = p.color;
                 } else {
                     ctx.shadowBlur = 0;
@@ -253,14 +227,9 @@
                 ctx.fill();
             });
 
-            // Сброс свечения контекста перед следующим кадром
             ctx.shadowBlur = 0;
-
             requestAnimationFrame(animate);
         }
-
-        // Запуск
-        animate();
     </script>
 </body>
 </html>
