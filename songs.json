@@ -267,7 +267,13 @@
         {
             "title": "НОГУ СВЕЛО",
             "author": "Ногу свело",
-            "songs": []
+            "songs": [
+                {
+                    "title": "Наши юные смешные голоса",
+                    "author": "Ногу свело",
+                    "url": "https://www.dropbox.com/scl/fi/hci46ocshyqmqvnectaab/.mp3?rlkey=7cwc74ps57use7bagbs3y7qgz&st=xmxnay1l&dl=0"
+                }
+            ]
         }
     ],
     "all_songs": [
