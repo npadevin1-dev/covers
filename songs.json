@@ -145,7 +145,13 @@
         {
             "title": "ПОШЛАЯ МОЛЛИ",
             "author": "Кирилл Бледный",
-            "songs": []
+            "songs": [
+                {
+                    "title": "Все хотят меня поцеловать",
+                    "author": "Пошлая Молли",
+                    "url": "https://www.dropbox.com/scl/fi/u91xz1qin85ayn4c4vqp7/.mp3?rlkey=r9std31zsa3sa0vk07prtoxi2&st=z5kmprgd&dl=0"
+                }
+            ]
         }
     ],
     "all_songs": [
