@@ -1,1 +1,10 @@
-{"albums": [], "all_songs": []}
+{
+    "albums": [
+        {
+            "title": "ВНервы - Избранное",
+            "author": "Нервы",
+            "songs": []
+        }
+    ],
+    "all_songs": []
+}
