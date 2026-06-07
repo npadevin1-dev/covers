@@ -435,7 +435,13 @@
         {
             "title": "ВЕРА БРЕЖНЕВА",
             "author": "Вера Брежнева",
-            "songs": [],
+            "songs": [
+                {
+                    "title": "Реальная жизнь",
+                    "author": "Вера Брежнева",
+                    "url": "https://www.dropbox.com/scl/fi/2phb95km9gb7xquqf7vho/.mp3?rlkey=songfqmeim4202xeiouad61ng&st=n1lo6f82&dl=0"
+                }
+            ],
             "gif_url": ""
         }
     ],
