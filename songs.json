@@ -570,7 +570,13 @@
         {
             "title": "СОВМЕСТНОЕ",
             "author": "Денчик и Ванёк",
-            "songs": [],
+            "songs": [
+                {
+                    "title": "Лето поменяло географию",
+                    "author": "Сваты",
+                    "url": "https://www.dropbox.com/scl/fi/qtqyv5lgtutiuz53vnyll/.mp3?rlkey=18irnwefch5kaj5djhutv0i16&st=z519mgbx&dl=0"
+                }
+            ],
             "gif_url": ""
         }
     ],
