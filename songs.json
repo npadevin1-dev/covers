@@ -362,7 +362,13 @@
         {
             "title": "МОДЫ",
             "author": "Моды",
-            "songs": [],
+            "songs": [
+                {
+                    "title": "Полярник",
+                    "author": "Моды",
+                    "url": "https://www.dropbox.com/scl/fi/mbc31actxupwd94l4qh8f/.mp3?rlkey=4audidud8gidv2qbupa6buibl&st=pc9yc8fs&dl=0"
+                }
+            ],
             "gif_url": ""
         }
     ],
