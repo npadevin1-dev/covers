@@ -100,115 +100,97 @@
 
     <script>
         const canvas = document.getElementById('anarchyCanvas');
-        const ctx = canvas.getContext('2d');
+        const ctx = canvas.getContext('2d', { willReadFrequently: true });
         const width = canvas.width;
         const height = canvas.height;
-        const centerX = width / 2;
-        const centerY = height / 2;
 
-        const numParticles = 1000; 
+        const numParticles = 2500; // Высокая плотность для точечной структуры
         const particles = [];
-        const targetPositions = [];
+        let targetPositions = [];
         
-        let currentState = 'float'; // 'float', 'assemble', 'static'
+        let currentState = 'float';
         let stateTimer = 0;
+        let isReady = false;
 
-        // Генерация точной геометрии рваного гранж-знака с картинки
-        function generateGrungeAnarchy() {
-            const r = 105; // Радиус кольца
+        // Вшитая картинка в формате Base64 DataURL
+        const img = new Image();
+        img.src = "data:image/jpeg;base64," + "";
 
-            // 1. Кольцо О (с текстурными неровностями и утолщениями как на фото)
-            for (let i = 0; i < 400; i++) {
-                let angle = (i / 400) * Math.PI * 2;
-                // Добавляем микро-шум к радиусу, чтобы сымитировать текстуру кисти
-                let noise = Math.sin(angle * 12) * 3 + (Math.random() - 0.5) * 4;
-                // Локальное утолщение в некоторых частях кольца
-                let thick = (Math.random() - 0.5) * 3;
-                
-                targetPositions.push({
-                    x: centerX + (r + noise) * Math.cos(angle) + thick,
-                    y: centerY + (r + noise) * Math.sin(angle) + thick
-                });
+        img.onload = function() {
+            const tempCanvas = document.createElement('canvas');
+            const tempCtx = tempCanvas.getContext('2d');
+            tempCanvas.width = width;
+            tempCanvas.height = height;
+
+            // Рисуем макет знака в буфер памяти
+            const size = 300; 
+            tempCtx.drawImage(img, (width - size) / 2, (height - size) / 2, size, size);
+
+            const imgData = tempCtx.getImageData(0, 0, width, height).data;
+
+            // Сканируем пиксели оригинального рисунка
+            for (let y = 0; y < height; y += 1) {
+                for (let x = 0; x < width; x += 1) {
+                    const index = (y * width + x) * 4;
+                    const r = imgData[index];
+                    const g = imgData[index + 1];
+                    const b = imgData[index + 2];
+                    
+                    // Выделяем контуры знака (светлые пиксели на темном фоне)
+                    if (r > 140 && g > 140 && b > 140) {
+                        targetPositions.push({ x: x, y: y });
+                    }
+                }
             }
 
-            // 2. Левая стойка буквы 'А' (выходит далеко за пределы кольца вниз-влево)
-            const leftStart = { x: centerX - 100, y: centerY + 140 };
-            const topPoint = { x: centerX + 5, y: centerY - 110 }; // Смещено чуть вправо в вершине
-            for (let i = 0; i < 200; i++) {
-                let t = i / 200;
-                let noise = (Math.random() - 0.5) * 4;
-                targetPositions.push({
-                    x: leftStart.x + (topPoint.x - leftStart.x) * t + noise,
-                    y: leftStart.y + (topPoint.y - leftStart.y) * t + noise
-                });
+            // Если рисунок не распознался (на случай сбоя b64), создаем дефолтную сетку
+            if (targetPositions.length === 0) {
+                for(let i=0; i<numParticles; i++) {
+                    targetPositions.push({ x: width/2 + Math.cos(i)*100, y: height/2 + Math.sin(i)*100 });
+                }
             }
 
-            // 3. Правая стойка буквы 'А' (идет вниз вправо, рваная текстура)
-            const rightEnd = { x: centerX + 115, y: centerY + 125 };
-            for (let i = 0; i < 200; i++) {
-                let t = i / 200;
-                let noise = (Math.random() - 0.5) * 4;
-                targetPositions.push({
-                    x: topPoint.x + (rightEnd.x - topPoint.x) * t + noise,
-                    y: topPoint.y + (rightEnd.y - topPoint.y) * t + noise
-                });
-            }
-
-            // 4. Длинная перекладина буквы 'А' (сильно вылетает за границы кольца с обеих сторон!)
-            // На картинке левый хвост перекладины острый и длинный, правый — уходит вверх-вправо
-            const barStart = { x: centerX - 135, y: centerY + 35 };
-            const barEnd = { x: centerX + 160, y: centerY - 25 };
-            for (let i = 0; i < 200; i++) {
-                let t = i / 200;
-                let noise = (Math.random() - 0.5) * 3.5;
-                targetPositions.push({
-                    x: barStart.x + (barEnd.x - barStart.x) * t + noise,
-                    y: barStart.y + (barEnd.y - barStart.y) * t + noise
-                });
-            }
-
-            // Подгоняем размер массива частиц
-            while (targetPositions.length < numParticles) {
-                targetPositions.push(targetPositions[Math.floor(Math.random() * targetPositions.length)]);
-            }
-        }
+            initParticles();
+            isReady = true;
+            animate();
+        };
 
         function initParticles() {
             for (let i = 0; i < numParticles; i++) {
+                const target = targetPositions[i % targetPositions.length];
                 particles.push({
                     x: Math.random() * width,
                     y: Math.random() * height,
-                    vx: (Math.random() - 0.5) * 2,
-                    vy: (Math.random() - 0.5) * 2,
-                    size: Math.random() * 1.6 + 1.1,
-                    color: i % 2 === 0 ? '#ff00ff' : '#00ffff',
-                    targetX: targetPositions[i].x,
-                    targetY: targetPositions[i].y
+                    vx: (Math.random() - 0.5) * 2.5,
+                    vy: (Math.random() - 0.5) * 2.5,
+                    size: Math.random() * 1.2 + 0.8, // Делаем точки мелкими и аккуратными
+                    targetX: target.x,
+                    targetY: target.y
                 });
             }
         }
 
-        generateGrungeAnarchy();
-        initParticles();
-
         function animate() {
+            if (!isReady) return;
             ctx.clearRect(0, 0, width, height);
             stateTimer++;
 
-            // Фазы анимации
+            // Фазы: полет (220 кадров) -> сборка (60 кадров) -> фиксация (160 кадров)
             if (currentState === 'float' && stateTimer > 220) {
                 currentState = 'assemble';
                 stateTimer = 0;
-            } else if (currentState === 'assemble' && stateTimer > 55) {
+            } else if (currentState === 'assemble' && stateTimer > 60) {
                 currentState = 'static';
                 stateTimer = 0;
-            } else if (currentState === 'static' && stateTimer > 150) {
+            } else if (currentState === 'static' && stateTimer > 160) {
                 currentState = 'float';
                 stateTimer = 0;
-                // Импульс взрыва при распаде
+                // Резкий импульс взрыва во все стороны
                 particles.forEach(p => {
-                    p.vx = (Math.random() - 0.5) * 7;
-                    p.vy = (Math.random() - 0.5) * 7;
+                    const angle = Math.random() * Math.PI * 2;
+                    const speed = Math.random() * 6 + 2;
+                    p.vx = Math.cos(angle) * speed;
+                    p.vy = Math.sin(angle) * speed;
                 });
             }
 
@@ -216,42 +198,42 @@
                 if (currentState === 'float') {
                     p.x += p.vx;
                     p.y += p.vy;
-                    p.vx *= 0.98;
-                    p.vy *= 0.98;
+                    p.vx *= 0.96; // Плавное торможение после взрыва
+                    p.vy *= 0.96;
 
                     if (p.x < 0 || p.x > width) p.vx *= -1;
                     if (p.y < 0 || p.y > height) p.vy *= -1;
 
                 } else if (currentState === 'assemble') {
-                    // Быстрое стягивание в форму знака
-                    p.x += (p.targetX - p.x) * 0.24;
-                    p.y += (p.targetY - p.y) * 0.24;
+                    // Плавное, но быстрое стягивание точно в пиксель рисунка
+                    p.x += (p.targetX - p.x) * 0.2;
+                    p.y += (p.targetY - p.y) * 0.2;
 
                 } else if (currentState === 'static') {
-                    // Микро-вибрация точек, воспроизводящая эффект «живого» шума
-                    p.x = p.targetX + (Math.random() - 0.5) * 0.9;
-                    p.y = p.targetY + (Math.random() - 0.5) * 0.9;
+                    // Эффект статического мерцания/шума внутри контура знака
+                    p.x = p.targetX + (Math.random() - 0.5) * 0.7;
+                    p.y = p.targetY + (Math.random() - 0.5) * 0.7;
                 }
 
+                // Отрисовка чисто белых точек
                 ctx.beginPath();
                 ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-
+                
+                // Легкое белое неоновое свечение в собранном состоянии
                 if (currentState !== 'float') {
-                    ctx.shadowBlur = 8;
-                    ctx.shadowColor = p.color;
+                    ctx.shadowBlur = 6;
+                    ctx.shadowColor = "#ffffff";
                 } else {
                     ctx.shadowBlur = 0;
                 }
 
-                ctx.fillStyle = p.color;
+                ctx.fillStyle = "#ffffff";
                 ctx.fill();
             });
 
             ctx.shadowBlur = 0;
             requestAnimationFrame(animate);
         }
-
-        animate();
     </script>
 </body>
 </html>
