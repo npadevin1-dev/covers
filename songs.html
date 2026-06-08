@@ -6,123 +6,87 @@
     <title>Нервы — КаверСхрон</title>
     <style>
         body {
-            background-color: #050505;
+            background-color: #000000;
             color: #ffffff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: sans-serif;
             padding: 20px;
-            max-width: 600px;
+            max-width: 450px;
             margin: auto;
             box-sizing: border-box;
         }
-
         .back-btn {
             display: inline-block;
-            background: #111;
-            color: #ccc;
+            background: #0d0d0d;
+            color: #ffffff;
             text-decoration: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            border: 1px solid #333;
-            margin-bottom: 30px;
-            font-size: 0.9rem;
-        }
-
-        h1 {
-            text-align: center;
-            color: #00ffff;
-            text-shadow: 0 0 10px #00ffff;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 30px;
-        }
-
-        .album-cover {
-            width: 100%;
-            border-radius: 12px;
-            border: 2px solid #ffff00;
-            box-shadow: 0 0 15px rgba(255, 255, 0, 0.3);
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: 1px solid #222;
             margin-bottom: 25px;
         }
-
+        h1 {
+            text-align: center;
+            color: #38b6ff;
+            text-shadow: 0 0 15px rgba(56, 182, 255, 0.6);
+            text-transform: uppercase;
+            margin-bottom: 25px;
+        }
+        .album-cover {
+            width: 100%;
+            border-radius: 16px;
+            border: 2px solid #fff200;
+            box-shadow: 0 0 20px rgba(255, 242, 0, 0.4);
+            margin-bottom: 30px;
+        }
         .track-card {
-            background: #111;
-            border: 2px solid #ffff00;
-            border-radius: 12px;
+            background: #111111;
+            border: 2px solid #fff200;
+            border-radius: 16px;
             padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 0 10px rgba(255, 255, 0, 0.1);
+            margin-bottom: 25px;
         }
-
         .track-title {
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             font-weight: bold;
-            margin-bottom: 2px;
+            margin-bottom: 4px;
         }
-
         .track-author {
             font-size: 1rem;
-            color: #888;
-            margin-bottom: 15px;
+            color: #888888;
+            margin-bottom: 20px;
         }
-
         .audio-wrapper {
-            background: #1a1a1a;
-            padding: 10px;
+            background: #000000;
+            padding: 8px;
             border-radius: 30px;
-            border: 1px solid #00ffff;
-            box-shadow: 0 0 10px rgba(0, 255, 255, 0.2);
-            margin-bottom: 15px;
+            border: 2px solid #00f0ff;
+            margin-bottom: 20px;
         }
-
         audio {
             width: 100%;
             display: block;
         }
-
-        .download-btn {
-            display: inline-block;
-            background: transparent;
-            color: #fff;
-            border: 1px solid #fff;
-            padding: 8px 16px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 0.9rem;
-            transition: all 0.2s;
-        }
-
-        .download-btn:hover {
-            background: #fff;
-            color: #000;
-        }
     </style>
 </head>
 <body>
-
     <a href="index.html" class="back-btn">← К альбомам</a>
-
     <h1>НЕРВЫ</h1>
-
-    <img src="https://www.dropbox.com/scl/fi/twzpte4l2gxucq7wbvghe/abarhiA.jpg?rlkey=x95xy34xtu0wzvdrhj0xpasp3&st=6uw5yojm&raw=1" class="album-cover" alt="Обложка">
+    <img src="https://www.dropbox.com/scl/fi/twzpte4l2gxucq7wbvghe/abarhiA.jpg?rlkey=x95xy34xtu0wzvdrhj0xpasp3&st=6uw5yojm&raw=1" class="album-cover">
 
     <div class="track-card">
         <div class="track-title">Осень</div>
         <div class="track-author">Женя Мильковский (в моём исполнении)</div>
         <div class="audio-wrapper">
-            <audio controls src="ССЫЛКА_НА_MP3_ОСЕНЬ_C_DROPBOX&raw=1"></audio>
+            <audio controls src="https://www.dropbox.com/scl/fi/f0v53qen02x0w03k4z9j7/osen.mp3?rlkey=48xsnwczpxn02g0h299mxk&raw=1"></audio>
         </div>
-        <a href="ССЫЛКА_НА_MP3_ОСЕНЬ_C_DROPBOX&dl=1" class="download-btn" download>Скачать песню</a>
     </div>
 
     <div class="track-card">
         <div class="track-title">Зажигалки</div>
         <div class="track-author">Нервы</div>
         <div class="audio-wrapper">
-            <audio controls src="ССЫЛКА_НА_MP3_ЗАЖИГАЛКИ_C_DROPBOX&raw=1"></audio>
+            <audio controls src="https://www.dropbox.com/scl/fi/e2n8m2xnz0h0mxn8z29w2/zazhigalki.mp3?rlkey=39mxnzp28hx0z2n0x8z2&raw=1"></audio>
         </div>
-        <a href="ССЫЛКА_НА_MP3_ЗАЖИГАЛКИ_C_DROPBOX&dl=1" class="download-btn" download>Скачать песню</a>
     </div>
-
 </body>
 </html>
