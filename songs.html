@@ -342,5 +342,16 @@
             }
         }
     </script>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js')
+        .then(reg => console.log('Сервис-воркер успешно пашет!', reg))
+        .catch(err => console.log('Косяк при регистрации воркера:', err));
+    });
+  }
+</script>
+
 </body>
 </html>
