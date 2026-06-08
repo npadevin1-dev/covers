@@ -4,74 +4,92 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Нервы — КаверСхрон</title>
+    <script>
+        // ЖЕСТКОЕ УДАЛЕНИЕ СТАРОГО СЕРВИС-ВОРКЕРА ИЗ ПАМЯТИ ТЕЛЕФОНА
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                for(let registration of registrations) {
+                    registration.unregister().then(function(boolean) {
+                        console.log('Старый ломающий кэш успешно ликвидирован!');
+                        window.location.reload(); // Перезагружаем страницу один раз после сноса
+                    });
+                }
+            });
+        }
+    </script>
     <style>
         body {
-            background-color: #050505;
+            background-color: #000000;
             color: #ffffff;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             padding: 20px;
-            max-width: 600px;
+            max-width: 450px;
             margin: auto;
             box-sizing: border-box;
         }
 
         .back-btn {
             display: inline-block;
-            background: #111;
-            color: #ccc;
+            background: #0d0d0d;
+            color: #ffffff;
             text-decoration: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            border: 1px solid #333;
-            margin-bottom: 30px;
-            font-size: 0.9rem;
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: 1px solid #222;
+            margin-bottom: 25px;
+            font-size: 0.95rem;
         }
 
         h1 {
             text-align: center;
-            color: #00ffff;
-            text-shadow: 0 0 10px #00ffff;
+            color: #38b6ff;
+            text-shadow: 0 0 15px rgba(56, 182, 255, 0.6);
             text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 30px;
+            letter-spacing: 3px;
+            font-size: 2rem;
+            margin-top: 10px;
+            margin-bottom: 25px;
         }
 
         .album-cover {
             width: 100%;
-            border-radius: 12px;
-            border: 2px solid #ffff00;
-            box-shadow: 0 0 15px rgba(255, 255, 0, 0.3);
-            margin-bottom: 25px;
+            display: block;
+            border-radius: 16px;
+            border: 2px solid #fff200;
+            box-shadow: 0 0 20px rgba(255, 242, 0, 0.4);
+            margin-bottom: 30px;
+            box-sizing: border-box;
         }
 
         .track-card {
-            background: #111;
-            border: 2px solid #ffff00;
-            border-radius: 12px;
+            background: #111111;
+            border: 2px solid #fff200;
+            border-radius: 16px;
             padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 0 10px rgba(255, 255, 0, 0.1);
+            margin-bottom: 25px;
+            box-shadow: 0 0 15px rgba(255, 242, 0, 0.2);
         }
 
         .track-title {
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             font-weight: bold;
-            margin-bottom: 2px;
+            margin-bottom: 4px;
+            letter-spacing: 0.5px;
         }
 
         .track-author {
             font-size: 1rem;
-            color: #888;
-            margin-bottom: 15px;
+            color: #888888;
+            margin-bottom: 20px;
         }
 
         .audio-wrapper {
-            background: #1a1a1a;
-            padding: 10px;
+            background: #000000;
+            padding: 8px;
             border-radius: 30px;
-            border: 1px solid #00ffff;
-            box-shadow: 0 0 10px rgba(0, 255, 255, 0.2);
-            margin-bottom: 15px;
+            border: 2px solid #00f0ff;
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+            margin-bottom: 20px;
         }
 
         audio {
@@ -82,19 +100,19 @@
         .download-btn {
             display: inline-block;
             background: transparent;
-            color: #fff;
-            border: 1px solid #fff;
-            padding: 8px 16px;
-            border-radius: 6px;
+            color: #ffffff;
+            border: 1px solid #ffffff;
+            padding: 10px 20px;
+            border-radius: 8px;
             text-decoration: none;
             font-weight: bold;
-            font-size: 0.9rem;
-            transition: all 0.2s;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
         }
 
         .download-btn:hover {
-            background: #fff;
-            color: #000;
+            background: #ffffff;
+            color: #000000;
         }
     </style>
 </head>
@@ -104,24 +122,24 @@
 
     <h1>НЕРВЫ</h1>
 
-    <img src="https://www.dropbox.com/scl/fi/twzpte4l2gxucq7wbvghe/abarhiA.jpg?rlkey=x95xy34xtu0wzvdrhj0xpasp3&st=6uw5yojm&raw=1" class="album-cover" alt="Обложка">
+    <img src="https://pictures.asgkg.com/images/nervy_band.jpg" class="album-cover" onerror="this.src='https://www.dropbox.com/scl/fi/twzpte4l2gxucq7wbvghe/abarhiA.jpg?rlkey=x95xy34xtu0wzvdrhj0xpasp3&st=6uw5yojm&raw=1'">
 
     <div class="track-card">
         <div class="track-title">Осень</div>
-        <div class="track-author">Женя Мильковский (в моём исполнении)</div>
+        <div class="track-author">Женя Мильковский(в моём исполнении)</div>
         <div class="audio-wrapper">
-            <audio controls src="ССЫЛКА_НА_MP3_ОСЕНЬ_C_DROPBOX&raw=1"></audio>
+            <audio controls src="ССЫЛКА_НА_ОСЕНЬ_ИЗ_ШАГА_1"></audio>
         </div>
-        <a href="ССЫЛКА_НА_MP3_ОСЕНЬ_C_DROPBOX&dl=1" class="download-btn" download>Скачать песню</a>
+        <a href="ССЫЛКА_НА_ОСЕНЬ_ИЗ_ШАГА_1" class="download-btn" download>Скачать песню</a>
     </div>
 
     <div class="track-card">
         <div class="track-title">Зажигалки</div>
         <div class="track-author">Нервы</div>
         <div class="audio-wrapper">
-            <audio controls src="ССЫЛКА_НА_MP3_ЗАЖИГАЛКИ_C_DROPBOX&raw=1"></audio>
+            <audio controls src="ССЫЛКА_НА_ЗАЖИГАЛКИ_ИЗ_ШАГА_1"></audio>
         </div>
-        <a href="ССЫЛКА_НА_MP3_ЗАЖИГАЛКИ_C_DROPBOX&dl=1" class="download-btn" download>Скачать песню</a>
+        <a href="ССЫЛКА_НА_ЗАЖИГАЛКИ_ИЗ_ШАГА_1" class="download-btn" download>Скачать песню</a>
     </div>
 
 </body>
