@@ -141,8 +141,8 @@
             const themeStyle = document.getElementById('custom-theme-runtime');
             if (album && album.custom_css) {
                 themeStyle.innerHTML = album.custom_css;
-                // Отключаем дефолтную RGB анимацию для карточек внутри кастомного режима
-                document.querySelectorAll('.song-card, .album-card').forEach(el => {
+                // Гасим RGB перелив ТОЛЬКО у карточек песен и баннера внутри открытого альбома
+                document.querySelectorAll('.song-card, .album-banner').forEach(el => {
                     el.style.animation = 'none';
                 });
                 const pTitle = document.getElementById('page-title');
@@ -190,19 +190,6 @@
                         <p class="album-title">${album.title}</p>
                         <p class="album-author">${album.author}</p>
                     `;
-                    
-                    // Если у альбома есть своя тема, то подкрашиваем его карточку в сетке
-                    if (album.custom_css) {
-                        card.style.animation = "none";
-                        // Временный костыль для применения стилей карточки в меню
-                        setTimeout(() => {
-                            let tempDiv = document.createElement('div');
-                            tempDiv.innerHTML = `<style>${album.custom_css.replace(/\.track-card/g, `#album-card-${idx}`)}</style>`;
-                            card.id = `album-card-${idx}`;
-                            document.head.appendChild(tempDiv);
-                        }, 50);
-                    }
-
                     card.onclick = () => showSongsFromAlbum(album, false);
                     content.appendChild(card);
                 });
@@ -284,7 +271,7 @@
                 const downloadUrl = song.url.replace('dl=0', 'dl=1');
 
                 const card = document.createElement('div');
-                card.className = 'song-card track-card'; // Добавлен класс track-card для кастомных стилей
+                card.className = 'song-card track-card';
                 card.id = `card-${index}`;
                 card.innerHTML = `
                     <p class="song-title">${song.title}</p>
