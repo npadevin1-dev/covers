@@ -775,23 +775,6 @@
             "custom_css": ""
         },
         {
-            "title": "СТАЛКЕРСКИЕ",
-            "author": "Денис Гейгер",
-            "songs": [
-                {
-                    "title": "Тени Чернобыля",
-                    "author": "С.У.М.Е.Р.К.И.",
-                    "url": "https://www.dropbox.com/scl/fi/alusu7qngehlsfzpbarca/.mp3?rlkey=t35wq8kx00c81pdtf6oz1kwtw&st=cqwn7hpm&dl=0"
-                }
-            ],
-            "gif_url": "https://www.dropbox.com/scl/fi/gdsa8l1l5s852v3qe83u7/7gox.gif?rlkey=s2ey11yj6yyg9xhawx8vvcufu&st=nyowkkwv&dl=0",
-            "theme": {
-                "prompt": "сталкерский серый",
-                "is_dynamic": false
-            },
-            "custom_css": ""
-        },
-        {
             "title": "ДДТ",
             "author": "Юрий Шевчук",
             "songs": [],
