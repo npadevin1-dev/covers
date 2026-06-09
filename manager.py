@@ -17,7 +17,7 @@ def load_data():
             if "all_songs" not in data: data["all_songs"] = []
             for alb in data["albums"]:
                 if "gif_url" not in alb: alb["gif_url"] = ""
-                if "theme" not in alb: alb["theme"] = {"prompt": "default_rgb", "is_dynamic": True}
+                if "custom_css" not in alb: alb["custom_css"] = ""
             return data
         except json.JSONDecodeError:
             return {"albums": [], "all_songs": []}
@@ -35,7 +35,7 @@ def sync_to_github():
     print("\nСинхронизация с сервером GitHub...")
     os.chdir(REPO_DIR)
     subprocess.run(["git", "add", "."], check=False)
-    subprocess.run(["git", "commit", "-m", "Обновление медиатеки и ИИ-оформлений"], check=False)
+    subprocess.run(["git", "commit", "-m", "Обновление медиатеки и стилей оформления"], check=False)
     subprocess.run(["git", "push"], check=False)
     print("Изменения успешно отправлены на сайт!\n")
 
@@ -50,7 +50,7 @@ def main():
         print("5. Создать НОВЫЙ Альбом")
         print("6. Редактировать Альбом (Добавить песню / Изменить данные)")
         print("7. Удалить Альбом")
-        print("8. Настроить ТЕМУ Альбома (Текстом для ИИ!)")
+        print("8. Редактировать ТЕМУ Альбома (Вставить CSS-код)")
         print("---------------------------------------------")
         print("9. Перейти на сайт")
         print("0. Выход")
@@ -99,9 +99,8 @@ def main():
             if not data["albums"]: print("Альбомов нет.")
             for i, a in enumerate(data["albums"], 1):
                 has_gif = "[GIF есть]" if a.get("gif_url") else "[Без обложки]"
-                t = a.get("theme", {"prompt": "default_rgb"})
-                t_info = "Стандартный RGB" if t.get("prompt") == "default_rgb" else f"ИИ-Тема: '{t.get('prompt')}' ({'Динамика' if t.get('is_dynamic') else 'Статика'})"
-                print(f"{i}. '{a['title']}' | {has_gif} | {t_info}")
+                has_css = "[Кастомная тема]" if a.get("custom_css") else "[Стандартный RGB]"
+                print(f"{i}. '{a['title']}' | {has_gif} | {has_css}")
 
         elif choice == '5':
             print("\n--- СОЗДАНИЕ АЛЬБОМА ---")
@@ -113,7 +112,7 @@ def main():
                 "author": author, 
                 "songs": [], 
                 "gif_url": "",
-                "theme": {"prompt": "default_rgb", "is_dynamic": True}
+                "custom_css": ""
             })
             save_data(data)
             print(f"Альбом '{title}' успешно создан.")
@@ -191,7 +190,7 @@ def main():
             except ValueError: print("Ошибка.")
 
         elif choice == '8':
-            print("\n--- ИИ-РЕДАКТОР ТЕМЫ АЛЬБОМА ---")
+            print("\n--- РЕДАКТИРОВАНИЕ ТЕМЫ АЛЬБОМА ---")
             if not data["albums"]: print("Нет доступных альбомов."); continue
             for i, a in enumerate(data["albums"], 1):
                 print(f"{i}. '{a['title']}' — {a['author']}")
@@ -200,30 +199,28 @@ def main():
                 if 1 <= idx <= len(data["albums"]):
                     sel_alb = data["albums"][idx - 1]
                     print(f"\nВыбран альбом: '{sel_alb['title']}'")
-                    print("1. Описать тему словами (для ИИ)")
-                    print("2. Удалить кастомную тему и вернуть динамический RGB")
+                    print("1. Вставить готовый CSS-код темы")
+                    print("2. Сбросить тему (вернуть стандартный динамический RGB)")
                     print("0. Отмена")
                     
                     theme_choice = input("Выберите действие: ").strip()
                     
                     if theme_choice == '1':
-                        prompt_text = input("\nОпиши тему текстом (например: 'сталкерский зеленый', 'кроваво-красный рок', 'фиолетовый неон'): ").strip()
-                        if not prompt_text:
-                            print("Ошибка: Описание не может быть пустым.")
+                        print("\nВставьте CSS-код темы (после ввода нажмите Enter):")
+                        css_code = input(">>> ").strip()
+                        if not css_code:
+                            print("Ошибка: Код не может быть пустым.")
                             continue
-                            
-                        dyn_input = input("Добавить динамику (плавное мигание цвета)? (д/н): ").lower().strip()
-                        is_dynamic = True if dyn_input == 'д' else False
                         
-                        sel_alb["theme"] = {"prompt": prompt_text, "is_dynamic": is_dynamic}
+                        sel_alb["custom_css"] = css_code
                         save_data(data)
-                        print(f"✅ Запрос '{prompt_text}' сохранен в базу!")
+                        print(f"✅ Кастомные стили для альбома '{sel_alb['title']}' сохранены!")
                         sync_to_github()
                         
                     elif theme_choice == '2':
-                        sel_alb["theme"] = {"prompt": "default_rgb", "is_dynamic": True}
+                        sel_alb["custom_css"] = ""
                         save_data(data)
-                        print(f"Тема сброшена к стандартному RGB.")
+                        print(f"Тема сброшена к стандартному RGB для альбома '{sel_alb['title']}'.")
                         sync_to_github()
                     else:
                         print("Отмена.")
