@@ -60,7 +60,11 @@
                     "url": "https://www.dropbox.com/scl/fi/bwncthv2x1k41ja9mvjzr/.mp3?rlkey=kkn29j5d5v1yvwqk1a6w0890n&st=cmc3ced9&dl=0"
                 }
             ],
-            "gif_url": "https://www.dropbox.com/scl/fi/6ormsz9ghi27huwzcvd7i/tumblr_mqy42i9fmt1rofpabo1_500.gif?rlkey=0211z543xzco1ic61qoqchg3m&st=btv7xlm0&dl=0"
+            "gif_url": "https://www.dropbox.com/scl/fi/6ormsz9ghi27huwzcvd7i/tumblr_mqy42i9fmt1rofpabo1_500.gif?rlkey=0211z543xzco1ic61qoqchg3m&st=btv7xlm0&dl=0",
+            "theme": {
+                "prompt": "default_rgb",
+                "is_dynamic": true
+            }
         },
         {
             "title": "ALAN WALKER",
@@ -72,7 +76,11 @@
                     "url": "https://www.dropbox.com/scl/fi/qi9kt8y64eawcpslvdzem/Faded-Alan-Walker.mp3?rlkey=a9alrkmmq30mh5f23ddrudwl2&st=2rvbe511&dl=0"
                 }
             ],
-            "gif_url": "https://www.dropbox.com/scl/fi/kgg9ka90ct3w63cll8sto/giphy.gif?rlkey=zy7t98xvh0q1gr0h9bjpt3fa5&st=ucs9qi8g&dl=0"
+            "gif_url": "https://www.dropbox.com/scl/fi/kgg9ka90ct3w63cll8sto/giphy.gif?rlkey=zy7t98xvh0q1gr0h9bjpt3fa5&st=ucs9qi8g&dl=0",
+            "theme": {
+                "prompt": "default_rgb",
+                "is_dynamic": true
+            }
         },
         {
             "title": "КИНО",
@@ -149,7 +157,11 @@
                     "url": "https://www.dropbox.com/scl/fi/re50idrkaxwx2avyr0pbn/.mp3?rlkey=55x35ecbda4ri8nueia1diq51&st=z754y9bx&dl=0"
                 }
             ],
-            "gif_url": "https://www.dropbox.com/scl/fi/zmdsgn0m2gtbhfpzbyd1q/doc140610496_203710099.gif?rlkey=st9fanyejrf05zr20s4vpjrhj&st=ty54h4k4&dl=0"
+            "gif_url": "https://www.dropbox.com/scl/fi/zmdsgn0m2gtbhfpzbyd1q/doc140610496_203710099.gif?rlkey=st9fanyejrf05zr20s4vpjrhj&st=ty54h4k4&dl=0",
+            "theme": {
+                "prompt": "default_rgb",
+                "is_dynamic": true
+            }
         },
         {
             "title": "БАСТА",
@@ -161,7 +173,11 @@
                     "url": "https://www.dropbox.com/scl/fi/i79j2rmf7ywr57ci2jipv/.mp3?rlkey=dp225bomlmnf5sa11m06kbxfa&st=l25vkzjl&dl=0"
                 }
             ],
-            "gif_url": ""
+            "gif_url": "",
+            "theme": {
+                "prompt": "default_rgb",
+                "is_dynamic": true
+            }
         },
         {
             "title": "ПРОЧЕЕ",
@@ -213,7 +229,11 @@
                     "url": "https://www.dropbox.com/scl/fi/19v20j14hke0g81xia7z4/.mp3?rlkey=obqw5aymbiqdal0gdu8tb9bgk&st=s0wqls64&dl=0"
                 }
             ],
-            "gif_url": ""
+            "gif_url": "",
+            "theme": {
+                "prompt": "default_rgb",
+                "is_dynamic": true
+            }
         },
         {
             "title": "ЮРИЙ ШАТУНОВ",
@@ -230,7 +250,11 @@
                     "url": "https://www.dropbox.com/scl/fi/sbzjv2dec8cic3mo4czrv/.mp3?rlkey=3n4o4mpgogiqth1laym8o4nma&st=3eg5w838&dl=0"
                 }
             ],
-            "gif_url": ""
+            "gif_url": "",
+            "theme": {
+                "prompt": "default_rgb",
+                "is_dynamic": true
+            }
         },
         {
             "title": "КОРОЛЬ И ШУТ",
@@ -242,7 +266,11 @@
                     "url": "https://www.dropbox.com/scl/fi/vg18v9svnlgb6s4gypyh2/.mp3?rlkey=v0etiddss0gp84xfme2uzzxkb&st=jhoial7k&dl=0"
                 }
             ],
-            "gif_url": "https://www.dropbox.com/scl/fi/c06k72uet8oa5fd06nird/ag704J.gif?rlkey=8kjqpj1x84605chu3jvy707cq&st=vffexl7z&dl=0"
+            "gif_url": "https://www.dropbox.com/scl/fi/c06k72uet8oa5fd06nird/ag704J.gif?rlkey=8kjqpj1x84605chu3jvy707cq&st=vffexl7z&dl=0",
+            "theme": {
+                "prompt": "default_rgb",
+                "is_dynamic": true
+            }
         },
         {
             "title": "LIZER",
@@ -264,7 +292,11 @@
                     "url": "https://www.dropbox.com/scl/fi/p50tfwb69maipx6cgwxxx/.mp3?rlkey=ss7l2i0wmrukob3euo9u9vv8i&st=wq7vug8q&dl=0"
                 }
             ],
-            "gif_url": ""
+            "gif_url": "",
+            "theme": {
+                "prompt": "default_rgb",
+                "is_dynamic": true
+            }
         },
         {
             "title": "БУМБОКС",
@@ -276,7 +308,11 @@
                     "url": "https://www.dropbox.com/scl/fi/c5rtexgejzzx9rukc9klz/.mp3?rlkey=ep5orb6g1tzpo5st5znj18twm&st=5ncnr658&dl=0"
                 }
             ],
-            "gif_url": ""
+            "gif_url": "",
+            "theme": {
+                "prompt": "default_rgb",
+                "is_dynamic": true
+            }
         },
         {
             "title": "НАЙК БОРЗОВ",
@@ -288,7 +324,11 @@
                     "url": "https://www.dropbox.com/scl/fi/0jzvb8lee6odh79xt8ur4/.mp3?rlkey=zt7t7ov3n6b4cs0rj5n3c014m&st=uk7gwy31&dl=0"
                 }
             ],
-            "gif_url": ""
+            "gif_url": "",
+            "theme": {
+                "prompt": "default_rgb",
+                "is_dynamic": true
+            }
         },
         {
             "title": "ТИМА БЕЛОРУССКИХ",
@@ -305,7 +345,11 @@
                     "url": "https://www.dropbox.com/scl/fi/eglzg1271u8q7w2tj9k9a/.mp3?rlkey=ngp594vqwgzampq95u14z38fm&st=nlrndo5t&dl=0"
                 }
             ],
-            "gif_url": ""
+            "gif_url": "",
+            "theme": {
+                "prompt": "default_rgb",
+                "is_dynamic": true
+            }
         },
         {
             "title": "ВАЛЕНТИН СТРЫКАЛО",
@@ -322,7 +366,11 @@
                     "url": "https://www.dropbox.com/scl/fi/uokjbk8l95ve85afyrxfi/.mp3?rlkey=77bpca50f4vpjkxqvobvbjkrx&st=x546myhq&dl=0"
                 }
             ],
-            "gif_url": ""
+            "gif_url": "",
+            "theme": {
+                "prompt": "default_rgb",
+                "is_dynamic": true
+            }
         },
         {
             "title": "ПОШЛАЯ МОЛЛИ",
@@ -339,7 +387,11 @@
                     "url": "https://www.dropbox.com/scl/fi/5ewd0ttwtk2rvam2g9phf/.mp3?rlkey=k9f2zej48qf3ot7owdrfpsyzw&st=c5nqcpgw&dl=0"
                 }
             ],
-            "gif_url": ""
+            "gif_url": "",
+            "theme": {
+                "prompt": "default_rgb",
+                "is_dynamic": true
+            }
         },
         {
             "title": "МАКС КОРЖ",
@@ -361,7 +413,11 @@
                     "url": "https://www.dropbox.com/scl/fi/yi8sjzvk6dgs77ody0o3b/.mp3?rlkey=vwh5oy3zjj01ezwg5gi6xkwgi&st=j452d661&dl=0"
                 }
             ],
-            "gif_url": ""
+            "gif_url": "",
+            "theme": {
+                "prompt": "default_rgb",
+                "is_dynamic": true
+            }
         },
         {
             "title": "ДЖИЗУС",
@@ -373,7 +429,11 @@
                     "url": "https://www.dropbox.com/scl/fi/7d1ha6im8i22igv4rxc2q/.mp3?rlkey=8xqu4n3nyd8uk8s1lfowbbgl7&st=cl8rvg88&dl=0"
                 }
             ],
-            "gif_url": ""
+            "gif_url": "",
+            "theme": {
+                "prompt": "default_rgb",
+                "is_dynamic": true
+            }
         },
         {
             "title": "МАКСИМ",
@@ -385,7 +445,11 @@
                     "url": "https://www.dropbox.com/scl/fi/jjvekex0hwqz2ty6lby5q/.mp3?rlkey=08rrtzmfetfh5kfwato4aewb8&st=9ktw6lk4&dl=0"
                 }
             ],
-            "gif_url": ""
+            "gif_url": "",
+            "theme": {
+                "prompt": "default_rgb",
+                "is_dynamic": true
+            }
         },
         {
             "title": "ЛЮБЭ",
@@ -397,7 +461,11 @@
                     "url": "https://www.dropbox.com/scl/fi/ntsqas6u4azlcyc63fnxp/.mp3?rlkey=qtxvf9ll3hjtq8i88y9iwvkit&st=9y1poi5u&dl=0"
                 }
             ],
-            "gif_url": ""
+            "gif_url": "",
+            "theme": {
+                "prompt": "default_rgb",
+                "is_dynamic": true
+            }
         },
         {
             "title": "SEREBRO",
@@ -409,7 +477,11 @@
                     "url": "https://www.dropbox.com/scl/fi/mp50zk6kg2tok2goz534l/.mp3?rlkey=by1ddcc68hlnf7acvnhh9pl04&st=prgf9xi7&dl=0"
                 }
             ],
-            "gif_url": ""
+            "gif_url": "",
+            "theme": {
+                "prompt": "default_rgb",
+                "is_dynamic": true
+            }
         },
         {
             "title": "ГРАЖДАНСКАЯ ОБОРОНА",
@@ -426,7 +498,11 @@
                     "url": "https://www.dropbox.com/scl/fi/pjs9ay8yyj7xuzyp89wly/.mp3?rlkey=oyfp396r7r4llucct11nro2q7&st=0cbo2vpq&dl=0"
                 }
             ],
-            "gif_url": ""
+            "gif_url": "",
+            "theme": {
+                "prompt": "default_rgb",
+                "is_dynamic": true
+            }
         },
         {
             "title": "БЛАТНЫЕ",
@@ -438,7 +514,11 @@
                     "url": "https://www.dropbox.com/scl/fi/hbqv8mzdxv5xof4hffj4g/.mp3?rlkey=6suctq7nqxwkmtr8a28g2jtut&st=jbybz4fb&dl=0"
                 }
             ],
-            "gif_url": ""
+            "gif_url": "",
+            "theme": {
+                "prompt": "default_rgb",
+                "is_dynamic": true
+            }
         },
         {
             "title": "НОГУ СВЕЛО",
@@ -450,7 +530,11 @@
                     "url": "https://www.dropbox.com/scl/fi/hci46ocshyqmqvnectaab/.mp3?rlkey=7cwc74ps57use7bagbs3y7qgz&st=xmxnay1l&dl=0"
                 }
             ],
-            "gif_url": ""
+            "gif_url": "",
+            "theme": {
+                "prompt": "default_rgb",
+                "is_dynamic": true
+            }
         },
         {
             "title": "ЭЛЕКТРОСЛАБОСТЬ",
@@ -462,7 +546,11 @@
                     "url": "https://www.dropbox.com/scl/fi/ovqnbq8wa6fqk3vdbod6g/.mp3?rlkey=sj99yc7kup5cfq0npgrby3mqn&st=edstr2vv&dl=0"
                 }
             ],
-            "gif_url": ""
+            "gif_url": "",
+            "theme": {
+                "prompt": "default_rgb",
+                "is_dynamic": true
+            }
         },
         {
             "title": "МОДЫ",
@@ -474,7 +562,11 @@
                     "url": "https://www.dropbox.com/scl/fi/mbc31actxupwd94l4qh8f/.mp3?rlkey=4audidud8gidv2qbupa6buibl&st=pc9yc8fs&dl=0"
                 }
             ],
-            "gif_url": ""
+            "gif_url": "",
+            "theme": {
+                "prompt": "default_rgb",
+                "is_dynamic": true
+            }
         },
         {
             "title": "MORGENSHTERN",
@@ -491,7 +583,11 @@
                     "url": "https://www.dropbox.com/scl/fi/nx8rfpy08rsqe1o99xuui/.mp3?rlkey=lvkfcgrt6wzx9efs2io18j1t3&st=6bt91mze&dl=0"
                 }
             ],
-            "gif_url": ""
+            "gif_url": "",
+            "theme": {
+                "prompt": "default_rgb",
+                "is_dynamic": true
+            }
         },
         {
             "title": "ПОРНОФИЛЬМЫ",
@@ -503,7 +599,11 @@
                     "url": "https://www.dropbox.com/scl/fi/3artmrvtqj13ithqyalfp/.mp3?rlkey=eu8g2fx14m9gcim5babhsrh2k&st=o6jgjiur&dl=0"
                 }
             ],
-            "gif_url": ""
+            "gif_url": "",
+            "theme": {
+                "prompt": "default_rgb",
+                "is_dynamic": true
+            }
         },
         {
             "title": "СОБСТВЕННЫЕ",
@@ -515,7 +615,11 @@
                     "url": "https://www.dropbox.com/scl/fi/x4vdl24cglj9xl2j02vwj/.mp3?rlkey=722rcynme8iyh7nny4pcdt7ta&st=i5u5u74g&dl=0"
                 }
             ],
-            "gif_url": ""
+            "gif_url": "",
+            "theme": {
+                "prompt": "default_rgb",
+                "is_dynamic": true
+            }
         },
         {
             "title": "ВЕРА БРЕЖНЕВА",
@@ -527,7 +631,11 @@
                     "url": "https://www.dropbox.com/scl/fi/0a958a1433gj99nthqsnd/.mp3?rlkey=o5mvgtslzl86w67xm8bhe5hwp&st=o95pup79&dl=0"
                 }
             ],
-            "gif_url": ""
+            "gif_url": "",
+            "theme": {
+                "prompt": "default_rgb",
+                "is_dynamic": true
+            }
         },
         {
             "title": "ЧЕРНИКОВСКАЯ ХАТА",
@@ -539,7 +647,11 @@
                     "url": "https://www.dropbox.com/scl/fi/3pn1uoom89ox00w8hkaj5/.mp3?rlkey=7g164aste4tr2xf74rfumbkg5&st=utzuyq82&dl=0"
                 }
             ],
-            "gif_url": ""
+            "gif_url": "",
+            "theme": {
+                "prompt": "default_rgb",
+                "is_dynamic": true
+            }
         },
         {
             "title": "СВАТЫ",
@@ -556,7 +668,11 @@
                     "url": "https://www.dropbox.com/scl/fi/s46e1v5qkrb6gygw4i2bz/.mp3?rlkey=4xj93p4lw91rlkqvex59sgw0v&st=r56og1qx&dl=0"
                 }
             ],
-            "gif_url": ""
+            "gif_url": "",
+            "theme": {
+                "prompt": "default_rgb",
+                "is_dynamic": true
+            }
         },
         {
             "title": "СОВА",
@@ -568,7 +684,11 @@
                     "url": "https://www.dropbox.com/scl/fi/qkp6dbwhzt54zeyyaaqci/.mp3?rlkey=llh6t4x7psttl8k3nesnf54rd&st=brwigssm&dl=0"
                 }
             ],
-            "gif_url": ""
+            "gif_url": "",
+            "theme": {
+                "prompt": "default_rgb",
+                "is_dynamic": true
+            }
         },
         {
             "title": "ГДЕ ФАНТОМ?",
@@ -580,7 +700,11 @@
                     "url": "https://www.dropbox.com/scl/fi/mqwxx1smruk1y8o775g1w/.mp3?rlkey=4j19jw844ur1oehfjjncwzdxy&st=f2a0r6pj&dl=0"
                 }
             ],
-            "gif_url": ""
+            "gif_url": "",
+            "theme": {
+                "prompt": "default_rgb",
+                "is_dynamic": true
+            }
         },
         {
             "title": "СОВМЕСТНОЕ",
@@ -612,7 +736,11 @@
                     "url": "https://www.dropbox.com/scl/fi/nx8rfpy08rsqe1o99xuui/.mp3?rlkey=lvkfcgrt6wzx9efs2io18j1t3&st=6bt91mze&dl=0"
                 }
             ],
-            "gif_url": ""
+            "gif_url": "",
+            "theme": {
+                "prompt": "default_rgb",
+                "is_dynamic": true
+            }
         },
         {
             "title": "СТАЛКЕРСКИЕ",
@@ -624,13 +752,21 @@
                     "url": "https://www.dropbox.com/scl/fi/alusu7qngehlsfzpbarca/.mp3?rlkey=t35wq8kx00c81pdtf6oz1kwtw&st=cqwn7hpm&dl=0"
                 }
             ],
-            "gif_url": "https://www.dropbox.com/scl/fi/gdsa8l1l5s852v3qe83u7/7gox.gif?rlkey=s2ey11yj6yyg9xhawx8vvcufu&st=nyowkkwv&dl=0"
+            "gif_url": "https://www.dropbox.com/scl/fi/gdsa8l1l5s852v3qe83u7/7gox.gif?rlkey=s2ey11yj6yyg9xhawx8vvcufu&st=nyowkkwv&dl=0",
+            "theme": {
+                "prompt": "сталкерский серый",
+                "is_dynamic": false
+            }
         },
         {
             "title": "ДДТ",
             "author": "Юрий Шевчук",
             "songs": [],
-            "gif_url": ""
+            "gif_url": "",
+            "theme": {
+                "prompt": "default_rgb",
+                "is_dynamic": true
+            }
         }
     ],
     "all_songs": [
