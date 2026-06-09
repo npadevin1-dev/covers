@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Альбомы</title>
-    <style>
+    <style id="base-styles">
         @keyframes rgb-shadow {
             0% { border-color: #ff0000; box-shadow: 0 0 10px #ff0000; }
             15% { border-color: #ff8800; box-shadow: 0 0 10px #ff8800; }
@@ -29,13 +29,14 @@
             background-color: #050505; color: #ffffff;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             padding: 20px; max-width: 800px; margin: auto;
+            transition: background 0.3s, color 0.3s;
         }
-        h1 { 
+        h1 {
             text-align: center; font-weight: 800; text-transform: uppercase;
             letter-spacing: 3px; font-size: 2rem; animation: text-glow 4s infinite linear;
             margin-bottom: 30px;
         }
-        
+
         .play-all-top-btn {
             display: block; width: 100%; text-align: center;
             background: linear-gradient(135deg, #121212, #1a0033); color: #ffffff;
@@ -93,19 +94,20 @@
         .progress-bar { flex-grow: 1; height: 6px; background: #333; border-radius: 3px; position: relative; cursor: pointer; margin-right: 15px; }
         .progress-fill { height: 100%; width: 0%; background: #00ffff; border-radius: 3px; box-shadow: 0 0 8px #00ffff; }
         .time-display { font-size: 0.85rem; color: #00ffff; font-family: monospace; white-space: nowrap; }
-        
+
         .download-btn {
             display: inline-block; background-color: transparent; color: #ffffff; padding: 10px 20px;
             font-size: 0.9rem; text-decoration: none; border-radius: 6px; font-weight: bold;
             border: 1px solid #ffffff; transition: all 0.3s ease;
         }
         .download-btn:hover { background-color: #ffffff; color: #000000; box-shadow: 0 0 15px #ffffff; }
-        
+
         .back-btn {
             display: inline-block; margin-bottom: 25px; color: #aaa; text-decoration: none;
             border: 1px solid #444; padding: 6px 18px; border-radius: 6px; cursor: pointer;
         }
     </style>
+    <style id="custom-theme-runtime"></style>
 </head>
 <body>
     <div id="top-bar">
@@ -116,7 +118,7 @@
     </div>
 
     <h1 id="page-title">Выбор альбома</h1>
-    
+
     <div id="banner-zone"></div>
     <div id="mode-zone"></div>
     <div id="main-content"></div>
@@ -135,6 +137,25 @@
             return `${m}:${s < 10 ? '0' : ''}${s}`;
         }
 
+        function applyAlbumTheme(album) {
+            const themeStyle = document.getElementById('custom-theme-runtime');
+            if (album && album.custom_css) {
+                themeStyle.innerHTML = album.custom_css;
+                // Отключаем дефолтную RGB анимацию для карточек внутри кастомного режима
+                document.querySelectorAll('.song-card, .album-card').forEach(el => {
+                    el.style.animation = 'none';
+                });
+                const pTitle = document.getElementById('page-title');
+                if(pTitle) pTitle.className = "album-title";
+            } else {
+                themeStyle.innerHTML = '';
+                document.body.style.background = '#050505';
+                document.body.style.color = '#ffffff';
+                const pTitle = document.getElementById('page-title');
+                if(pTitle) { pTitle.className = ""; pTitle.style.animation = "text-glow 4s infinite linear"; pTitle.style.color = ""; pTitle.style.textShadow = ""; }
+            }
+        }
+
         fetch('songs.json')
             .then(res => res.json())
             .then(data => {
@@ -145,12 +166,13 @@
 
         function showAlbums() {
             if (activeAudio) { activeAudio.pause(); activeAudio = null; }
-            
+            applyAlbumTheme(null);
+
             document.getElementById('nav-container').innerHTML = '<a href="index.html" class="back-btn">← Назад</a>';
             document.getElementById('page-title').innerText = "Выбор Альбома";
             document.getElementById('banner-zone').innerHTML = "";
             document.getElementById('mode-zone').innerHTML = "";
-            
+
             const actionZone = document.getElementById('global-action-zone');
             actionZone.innerHTML = `<div class="play-all-top-btn" id="master-play-btn">⚡ Включить всё (Все песни схрона) ⚡</div>`;
             document.getElementById('master-play-btn').onclick = launchAutomationMode;
@@ -168,6 +190,19 @@
                         <p class="album-title">${album.title}</p>
                         <p class="album-author">${album.author}</p>
                     `;
+                    
+                    // Если у альбома есть своя тема, то подкрашиваем его карточку в сетке
+                    if (album.custom_css) {
+                        card.style.animation = "none";
+                        // Временный костыль для применения стилей карточки в меню
+                        setTimeout(() => {
+                            let tempDiv = document.createElement('div');
+                            tempDiv.innerHTML = `<style>${album.custom_css.replace(/\.track-card/g, `#album-card-${idx}`)}</style>`;
+                            card.id = `album-card-${idx}`;
+                            document.head.appendChild(tempDiv);
+                        }, 50);
+                    }
+
                     card.onclick = () => showSongsFromAlbum(album, false);
                     content.appendChild(card);
                 });
@@ -187,6 +222,12 @@
             currentPlaylist = album.songs;
             currentTrackIndex = -1;
 
+            if (!isAutomation) {
+                applyAlbumTheme(album);
+            } else {
+                applyAlbumTheme(null);
+            }
+
             document.getElementById('global-action-zone').innerHTML = "";
 
             const nav = document.getElementById('nav-container');
@@ -201,6 +242,12 @@
             if (!isAutomation && album.gif_url) {
                 const rawGif = album.gif_url.replace('dl=0', 'raw=1');
                 bannerZone.innerHTML = `<div class="album-banner-container"><img src="${rawGif}" class="album-banner"></div>`;
+                if(album.custom_css) {
+                    setTimeout(() => {
+                        const bnr = bannerZone.querySelector('.album-banner');
+                        if(bnr) bnr.style.animation = 'none';
+                    }, 50);
+                }
             } else { bannerZone.innerHTML = ""; }
 
             const modeZone = document.getElementById('mode-zone');
@@ -235,9 +282,9 @@
             album.songs.forEach((song, index) => {
                 const playUrl = song.url.replace('dl=0', 'raw=1');
                 const downloadUrl = song.url.replace('dl=0', 'dl=1');
-                
+
                 const card = document.createElement('div');
-                card.className = 'song-card';
+                card.className = 'song-card track-card'; // Добавлен класс track-card для кастомных стилей
                 card.id = `card-${index}`;
                 card.innerHTML = `
                     <p class="song-title">${song.title}</p>
@@ -252,6 +299,11 @@
                     </div>
                     <a href="${downloadUrl}" download class="download-btn">Скачать песню</a>
                 `;
+                
+                if(!isAutomation && album.custom_css) {
+                    card.style.animation = 'none';
+                }
+                
                 content.appendChild(card);
 
                 const audio = card.querySelector(`#audio-${index}`);
@@ -277,8 +329,7 @@
                     btn.innerText = '▶';
                     fill.style.width = '0%';
                     card.classList.remove('playing');
-                    
-                    // Если включен режим автомата, перелистываем дальше
+
                     if (isAutomation) {
                         playNextTrack();
                     }
@@ -311,35 +362,22 @@
             }
         }
 
-        // Исправленная и чистая логика перелистывания треков
         function playNextTrack() {
             if (currentPlaylist.length === 0) return;
-            
             let nextIndex = -1;
-
             if (isRandomMode) {
-                // Если включен рандом и треков больше одного, ищем случайный индекс, отличный от старого
                 if (currentPlaylist.length > 1) {
                     do {
                         nextIndex = Math.floor(Math.random() * currentPlaylist.length);
                     } while (nextIndex === currentTrackIndex);
-                } else {
-                    nextIndex = 0;
-                }
+                } else { nextIndex = 0; }
             } else {
-                // Если режим по порядку, просто берём следующий индекс
                 nextIndex = currentTrackIndex + 1;
-                if (nextIndex >= currentPlaylist.length) {
-                    nextIndex = 0; // Зацикливаем на начало списка, если всё доиграло
-                }
+                if (nextIndex >= currentPlaylist.length) { nextIndex = 0; }
             }
-
             const nextAudio = document.getElementById(`audio-${nextIndex}`);
             const nextBtn = document.getElementById(`btn-${nextIndex}`);
-            
-            if (nextAudio && nextBtn) {
-                handlePlayClick(nextIndex, nextAudio, nextBtn);
-            }
+            if (nextAudio && nextBtn) { handlePlayClick(nextIndex, nextAudio, nextBtn); }
         }
     </script>
 </body>
