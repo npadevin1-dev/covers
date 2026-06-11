@@ -367,5 +367,86 @@
             if (nextAudio && nextBtn) { handlePlayClick(nextIndex, nextAudio, nextBtn); }
         }
     </script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    let currentAudio = null;
+
+    // Функция для получения всех аудио-элементов на странице в текущем плейлисте/альбоме
+    function getAudioElements() {
+        return Array.from(document.querySelectorAll('audio'));
+    }
+
+    // Функция обновления системной шторки Chrome (Media Session)
+    function updateMediaSession(audio) {
+        if ('mediaSession' in navigator) {
+            let audios = getAudioElements();
+            let index = audios.indexOf(audio);
+            
+            // Ищем текстовые данные трека из родительской карточки, не меняя UI
+            let card = audio.closest('div');
+            let title = "Кавер";
+            let artist = "Схрон";
+            
+            if (card) {
+                let titleElement = card.querySelector('h2, h3, .track-title, div');
+                if (titleElement) title = titleElement.innerText.split('\n')[0];
+            }
+
+            navigator.mediaSession.metadata = new MediaMetadata({
+                title: title,
+                artist: artist
+            });
+
+            // Активируем стрелочку "Вперед" в шторке, если есть следующий трек
+            navigator.mediaSession.setActionHandler('nexttrack', index < audios.length - 1 ? function() {
+                audios[index].pause();
+                audios[index].currentTime = 0;
+                audios[index + 1].play().catch(() => {});
+            } : null);
+
+            // Активируем стрелочку "Назад" в шторке, если есть предыдущий трек
+            navigator.mediaSession.setActionHandler('previoustrack', index > 0 ? function() {
+                audios[index].pause();
+                audios[index].currentTime = 0;
+                audios[index - 1].play().catch(() => {});
+            } : null);
+        }
+    }
+
+    // Навешиваем события на все плееры на странице
+    function syncPlayers() {
+        let audios = getAudioElements();
+        
+        audios.forEach((audio, index) => {
+            // Когда трек запускается
+            audio.addEventListener('play', function() {
+                // Если включили другой трек — гасим предыдущий
+                if (currentAudio && currentAudio !== audio) {
+                    currentAudio.pause();
+                    currentAudio.currentTime = 0;
+                }
+                currentAudio = audio;
+                updateMediaSession(audio);
+            });
+
+            // МЕХАНИКА АВТОПЕРЕКЛЮЧЕНИЯ: когда песня закончилась, включается следующая карточка
+            audio.addEventListener('ended', function() {
+                if (index < audios.length - 1) {
+                    audios[index + 1].play().catch(err => console.log("Автоплей заблокирован браузером, нужен клик"));
+                }
+            });
+        });
+    }
+
+    // Запускаем отслеживание плееров
+    syncPlayers();
+
+    // На случай динамической перезагрузки контента менеджером
+    const observer = new MutationObserver(syncPlayers);
+    observer.observe(document.body, { childList: true, subtree: true });
+});
+</script>
+
 </body>
 </html>
