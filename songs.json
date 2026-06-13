@@ -801,7 +801,13 @@
         {
             "title": "ЛАМПАБИКТ",
             "author": "Лампабикт",
-            "songs": [],
+            "songs": [
+                {
+                    "title": "Немеренно",
+                    "author": "Лампа Бикт",
+                    "url": "https://www.dropbox.com/scl/fi/rlwt2cqj3914ni9tmh6xd/.mp3?rlkey=5gnjs1rw5yqnno1xko2adbp9e&st=rn1uzfse&dl=0"
+                }
+            ],
             "gif_url": "",
             "custom_css": ""
         }
