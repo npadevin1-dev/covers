@@ -792,7 +792,13 @@
         {
             "title": "ДДТ",
             "author": "Юрий Шевчук",
-            "songs": [],
+            "songs": [
+                {
+                    "title": "Просвистела",
+                    "author": "ДДТ",
+                    "url": "https://www.dropbox.com/scl/fi/8nvcjsi8w03ctioivnld1/.mp3?rlkey=ikowwnc5ckwmktvqmxn424v8p&st=uzo4axty&dl=0"
+                }
+            ],
             "gif_url": "",
             "theme": {
                 "prompt": "default_rgb",
