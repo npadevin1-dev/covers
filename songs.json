@@ -834,7 +834,13 @@
         {
             "title": "БРАВО",
             "author": "Браво",
-            "songs": [],
+            "songs": [
+                {
+                    "title": "Любите девушки",
+                    "author": "Браво",
+                    "url": "https://www.dropbox.com/scl/fi/andu1nuaktp8goycs0ie7/.mp3?rlkey=ki2sts90pdkuxyywrdnch2yxm&st=t6rylgcx&dl=0"
+                }
+            ],
             "gif_url": "",
             "custom_css": ""
         }
