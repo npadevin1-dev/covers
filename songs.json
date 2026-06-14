@@ -858,7 +858,13 @@
         {
             "title": "ANIMAL ДЖАZ",
             "author": "AД",
-            "songs": [],
+            "songs": [
+                {
+                    "title": "Три полоски",
+                    "author": "Анимал джаz",
+                    "url": "https://www.dropbox.com/scl/fi/nhqu6909r3inkr900e0od/.mp3?rlkey=lgptbcvxa69olxb49ijofjyy9&st=2yzawozo&dl=0"
+                }
+            ],
             "gif_url": "",
             "custom_css": ""
         }
